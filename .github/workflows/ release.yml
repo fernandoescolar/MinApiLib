@@ -1,0 +1,84 @@
+on:
+  push:
+    tags:
+    - 'v*'
+
+name: New Release
+
+jobs:
+  pack:
+    runs-on: ubuntu-latest
+    name: Build RoutingRecords
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 7.0.x
+      - name: Test
+        run: dotnet test
+      - name: Create NuGet packages
+        run: |
+          GITHUB_VERSION="${{ github.ref }}"
+          GITHUB_VERSION=(${GITHUB_VERSION##*/})
+          RELEASE_VERSION="${GITHUB_VERSION//v}"
+          ARRAY_VERSION=(${RELEASE_VERSION//-/ })
+          VERSION="${ARRAY_VERSION[0]}"
+          VERSION_SUFFIX="${ARRAY_VERSION[1]}"
+          dotnet pack -c Release -o nupkg ./MinApiLib.sln -p:AssemblyVersion=$VERSION -p:VersionPrefix=$VERSION -p:VersionSuffix=$VERSION_SUFFIX -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: nupkg
+          path: ./nupkg/*.*
+          retention-days: 1
+  nugets:
+    needs: pack
+    runs-on: ubuntu-latest
+    name: Publish RoutingRecords
+    steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@v1
+        with:
+          name: nupkg
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 7.0.x
+      - name: Publish NuGet packages
+        run: |
+          dotnet nuget push ./nupkg/*.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
+  release:
+    needs: pack
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@v1
+        with:
+          name: nupkg
+      - name: Get Version
+        id: vars
+        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+      - name: Create Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.vars.outputs.tag }}
+          release_name: Release ${{ steps.vars.outputs.tag }}
+          draft: false
+          prerelease: false
+      - uses: AButler/upload-release-assets@v2.0
+        with:
+          files: 'nupkg/*.nupkg'
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          release-tag: ${{ steps.vars.outputs.tag }}
+  cleanup:
+    needs: release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: geekyeggo/delete-artifact@v1
+        with:
+          name: |
+            nupkg
