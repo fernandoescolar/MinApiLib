@@ -1,3 +1,6 @@
+[![license](https://img.shields.io/badge/License-MIT-purple.svg)](LICENSE)
+![version](https://img.shields.io/nuget/vpre/MinApiLib.Endpoints)
+
 # MinApiLib
 
 Asp.Net Core >=7 Minimal Api Library with extensions, filters, and utilities to create easy cool APIs.
