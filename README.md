@@ -29,9 +29,12 @@ dotnet add package MinApiLib.DependencyInjection
 dotnet add package MinApiLib.Endpoints
 dotnet add package MinApiLib.HashedIds
 dotnet add package MinApiLib.Hypermedia
+dotnet add package MinApiLib.Logging
 dotnet add package MinApiLib.OperationCanceled
 dotnet add package MinApiLib.Validation
 ```
+
+Take a look at the [samples](samples) folder to see how to use the packages.
 
 ## MinApiLib.DependencyInjection
 
