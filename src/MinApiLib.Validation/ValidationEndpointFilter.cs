@@ -7,22 +7,29 @@ public class ValidationEndpointFilter : IEndpointFilter
         foreach (var argument in context.Arguments)
         {
             if (argument is null) continue;
-            if (!argument.GetType().IsClass) continue;
 
-            var bodyProperty = argument.GetType().GetProperties().FirstOrDefault(x => x.Name == "Body");
+            var argumentIsBody = argument.GetType().GetCustomAttributes(typeof(FromBodyAttribute), true).FirstOrDefault() is not null;
+            if (argumentIsBody)
+            {
+                if (!MiniValidator.TryValidate(argument, out var errors))
+                {
+                    return ValueTask.FromResult<object>(Results.BadRequest(errors));
+                }
+
+                break;
+            }
+
+            var bodyProperty = argument.GetType().GetProperties().FirstOrDefault(x => x.GetCustomAttributes(typeof(FromBodyAttribute), true).Any());
+            bodyProperty ??= argument.GetType().GetProperties().FirstOrDefault(x => x.Name == "Body");
             if (bodyProperty is not null)
             {
                 if (!MiniValidator.TryValidate(bodyProperty.GetValue(argument), out var errors))
                 {
                     return ValueTask.FromResult<object>(Results.BadRequest(errors));
                 }
-            }
-            else if (!MiniValidator.TryValidate(argument, out var errors))
-            {
-                return ValueTask.FromResult<object>(Results.BadRequest(errors));
-            }
 
-            break;
+                break;
+            }
         }
 
         return next(context);

@@ -14,9 +14,9 @@ public static class HypermediaEndpointFilterExtensions
         return builder;
     }
 
-    public static RouteHandlerBuilder ProducesHypermedia<TResponse>(this RouteHandlerBuilder builder, int statusCode = 200)
+    public static RouteHandlerBuilder ProducesHypermedia<TResponse>(this RouteHandlerBuilder builder, int statusCode = 200, string contentType = HypermediaConstants.ContentType)
     {
-        builder.Produces<HypermediaObject<TResponse>>(statusCode, HypermediaConstants.ContentType);
+        builder.Produces<HypermediaObject<TResponse>>(statusCode, contentType);
         return builder;
     }
 }

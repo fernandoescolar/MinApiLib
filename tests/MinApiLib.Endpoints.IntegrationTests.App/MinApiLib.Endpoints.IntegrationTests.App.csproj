@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\MinApiLib.Endpoints\MinApiLib.Endpoints.csproj" />
+    <ProjectReference Include="..\..\src\MinApiLib.HashedIds\MinApiLib.HashedIds.csproj" />
+    <ProjectReference Include="..\..\src\MinApiLib.Hypermedia\MinApiLib.Hypermedia.csproj" />
+    <ProjectReference Include="..\..\src\MinApiLib.Validation\MinApiLib.Validation.csproj" />
+  </ItemGroup>
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+</Project>

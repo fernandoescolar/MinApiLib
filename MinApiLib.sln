@@ -23,6 +23,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinApiLib.Validation.Tests"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinApiLib.OperationCanceled.Tests", "tests\MinApiLib.OperationCanceled.Tests\MinApiLib.OperationCanceled.Tests.csproj", "{0C91ECEE-A182-49CC-86E9-DB029B7A7567}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinApiLib.Logging", "src\MinApiLib.Logging\MinApiLib.Logging.csproj", "{56231D50-CD2F-43EB-992C-42A120563600}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinApiLib.Endpoints.IntegrationTests.App", "tests\MinApiLib.Endpoints.IntegrationTests.App\MinApiLib.Endpoints.IntegrationTests.App.csproj", "{D16C7865-DF8E-43AB-9051-9750D8DA0A41}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -64,6 +68,14 @@ Global
 		{0C91ECEE-A182-49CC-86E9-DB029B7A7567}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0C91ECEE-A182-49CC-86E9-DB029B7A7567}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0C91ECEE-A182-49CC-86E9-DB029B7A7567}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56231D50-CD2F-43EB-992C-42A120563600}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56231D50-CD2F-43EB-992C-42A120563600}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56231D50-CD2F-43EB-992C-42A120563600}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56231D50-CD2F-43EB-992C-42A120563600}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D16C7865-DF8E-43AB-9051-9750D8DA0A41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D16C7865-DF8E-43AB-9051-9750D8DA0A41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D16C7865-DF8E-43AB-9051-9750D8DA0A41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D16C7865-DF8E-43AB-9051-9750D8DA0A41}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{D9336C23-C46E-4B23-A2AE-B0A53F2F8A94} = {90AF23FF-AE78-4764-9000-70260459842D}
@@ -74,5 +86,7 @@ Global
 		{0E6D0305-9B52-4BF0-B5A0-9F45729FFE0F} = {90AF23FF-AE78-4764-9000-70260459842D}
 		{DFC1C6E6-553A-426E-B53D-1EFAD8B46F30} = {CD8CA574-4588-4404-B7A3-9E85A7B5B0E7}
 		{0C91ECEE-A182-49CC-86E9-DB029B7A7567} = {CD8CA574-4588-4404-B7A3-9E85A7B5B0E7}
+		{56231D50-CD2F-43EB-992C-42A120563600} = {90AF23FF-AE78-4764-9000-70260459842D}
+		{D16C7865-DF8E-43AB-9051-9750D8DA0A41} = {CD8CA574-4588-4404-B7A3-9E85A7B5B0E7}
 	EndGlobalSection
 EndGlobal

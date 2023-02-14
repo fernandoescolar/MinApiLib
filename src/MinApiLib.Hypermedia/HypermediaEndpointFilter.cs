@@ -2,6 +2,13 @@
 
 public class HypermediaEndpointFilter : IEndpointFilter
 {
+    private readonly HypermediaOptions _options;
+
+    public HypermediaEndpointFilter(HypermediaOptions options)
+    {
+        _options = options;
+    }
+
     public async ValueTask<object> InvokeAsync(EndpointFilterInvocationContext context, EndpointFilterDelegate next)
     {
         var result = await next(context);
@@ -25,16 +32,16 @@ public class HypermediaEndpointFilter : IEndpointFilter
             var hypermediaResponse = hypermedia.Convert(v.Value);
             HypermediaLinkHelper.FullfillLinkUrls(hypermediaResponse, context.HttpContext);
 
-            return new HypermediaResult(hypermediaResponse, s.StatusCode.Value);
+            return new HypermediaResult(hypermediaResponse, s.StatusCode.Value, _options.ContentType);
         }
 
         return result;
     }
 
-    private static bool IsHypermediaRequest(EndpointFilterInvocationContext context)
+    private bool IsHypermediaRequest(EndpointFilterInvocationContext context)
         => context.HttpContext
                   .Request
                   .Headers
                   .Accept
-                  .Any(x => x.StartsWith(HypermediaConstants.ContentType, StringComparison.InvariantCultureIgnoreCase));
+                  .Any(x => x.StartsWith(_options.ContentType, StringComparison.InvariantCultureIgnoreCase));
 }
