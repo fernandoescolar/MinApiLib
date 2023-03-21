@@ -128,7 +128,7 @@ $ curl "http://localhost:5000/hello?name=fer"
 And you can configure any endpoint overriding the `Configure` method:
 
 ```csharp
-public record Hello() : GetEndpoint("/hello")
+public record Hello() : Get("/hello")
 {
     protected override RouteHandlerBuilder Configure(RouteHandlerBuilder builder)
         => builder
