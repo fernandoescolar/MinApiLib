@@ -2,6 +2,8 @@
 
 Asp.Net Core >=7 Minimal Api Library with extensions, filters, and utilities to create easy cool APIs.
 
+![MinApiLib](icon.png)
+
 MinApiLib provides the following packages:
 
 
@@ -44,3 +46,5 @@ Take a look at the [samples](samples) folder to see how to use the packages.
 [![license](https://img.shields.io/badge/License-MIT-purple.svg)](LICENSE)
 
 The source code we develop at **MinApiLib** is default being licensed as **MIT**. You can read more about [here](LICENSE).
+
+The package icon is the <a target="_blank" href="https://icons8.com/icon/1dMXEkMIykkN/constellation">Constellation</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>.

@@ -4,9 +4,22 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <OutputType>Library</OutputType>
     <IsPackable>true</IsPackable>
+    <PackageId>MinApiLib.OperationCanceled</PackageId>
+    <PackageTags>AspNetCore;api;minimalapi;lib;minapilib;operation;canceled;cancellation;499</PackageTags>
+    <Authors>Fernando Escolar</Authors>
+    <Description>OperationCanceled middlerware to return 499 status code</Description>
+    <PackageProjectUrl>https://github.com/fernandoescolar/MinApiLib</PackageProjectUrl>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".\README.md" Pack="true" PackagePath="" />
+    <None Include="..\..\LICENSE" Pack="true" PackagePath="" />
+    <None Include="..\..\icon.png" Pack="true" PackagePath="" />
   </ItemGroup>
 </Project>

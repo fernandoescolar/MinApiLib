@@ -4,5 +4,18 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <OutputType>Library</OutputType>
     <IsPackable>true</IsPackable>
+    <PackageId>MinApiLib.Endpoints</PackageId>
+    <PackageTags>AspNetCore;api;minimalapi;lib;minapilib;endpoints</PackageTags>
+    <Authors>Fernando Escolar</Authors>
+    <Description>EndPoints records and extensions for Minimal API.</Description>
+    <PackageProjectUrl>https://github.com/fernandoescolar/MinApiLib</PackageProjectUrl>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
+  <ItemGroup>
+    <None Include=".\README.md" Pack="true" PackagePath="" />
+    <None Include="..\..\LICENSE" Pack="true" PackagePath="" />
+    <None Include="..\..\icon.png" Pack="true" PackagePath="" />
+  </ItemGroup>
 </Project>

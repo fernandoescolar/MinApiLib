@@ -43,9 +43,9 @@ app.MapEndpoints(typeof(SomeObject).Assembly);
 Then, you can create endpoints:
 
 ```csharp
-public record Hello() : GetEndpoint("/hello")
+public record Hello() : Get("/hello")
 {
-    public IResult Handle()
+    protected override IResult Handle()
     {
         return Results.Ok("Hello World!");
     }
@@ -62,9 +62,9 @@ $ curl "http://localhost:5000/hello"
 This endpoint accepts asynchrony and cancellation:
 
 ```csharp
-public record Hello() : GetEndpoint("/hello")
+public record Hello() : GetAsync("/hello")
 {
-    public async Task<IResult> HandleAsync(CancellationToken cancellationToken)
+    protected override async Task<IResult> HandleAsync(CancellationToken cancellationToken)
     {
         await Task.Delay(1000, cancellationToken);
         return Results.Ok("Hello World!");
@@ -75,13 +75,13 @@ public record Hello() : GetEndpoint("/hello")
 This endpoint accepts a request object:
 
 ```csharp
-public record struct Request(string Name, CancellationToken CancellationToken);
+public record struct Request(string Name);
 
-public record Hello() : GetEndpoint<Request>("/hello")
+public record Hello() : GetAsync<Request>("/hello")
 {
-    protected override async Task<IResult> OnHandleAsync(Request request, CancellationToken CancellationToken)
+    protected override async Task<IResult> HandleAsync(Request request, CancellationToken CancellationToken)
     {
-        await Task.Delay(1000, request.CancellationToken);
+        await Task.Delay(1000, cancellationToken);
         return Results.Ok($"Hello {request.Name}!");
     }
 }
@@ -97,7 +97,7 @@ $ curl "http://localhost:5000/hello?name=fer"
 And you can decorate the request object with attributes:
 
 ```csharp
-public record struct Request([FromQuery] string Name, CancellationToken CancellationToken);
+public record struct Request([FromQuery] string Name);
 ```
 
 This endpoint accepts also a response object:
@@ -107,11 +107,11 @@ public record struct Request(string Name, CancellationToken CancellationToken);
 
 public record struct Response(string Message);
 
-public record Hello() : GetEndpoint<Request, Response>("/hello")
+public record Hello() : GetAsync<Request, Response>("/hello")
 {
-    protected override async Task<Response> OnHandleAsync(Request request)
+    protected override async Task<Response> HandleAsync(Request request, CancellationToken cancellationToken)
     {
-        await Task.Delay(1000, request.CancellationToken);
+        await Task.Delay(1000, cancellationToken);
         var response = new Response($"Hello {request.Name}!");
         return response;
     }
@@ -125,19 +125,19 @@ $ curl "http://localhost:5000/hello?name=fer"
 {"message":"Hello fer!"}%
 ```
 
-And you can configure any endpoint overriding the `OnConfigure` method:
+And you can configure any endpoint overriding the `Configure` method:
 
 ```csharp
 public record Hello() : GetEndpoint("/hello")
 {
-    protected override void OnConfigure(RouteHandlerBuilder builder)
+    protected override RouteHandlerBuilder Configure(RouteHandlerBuilder builder)
         => builder
                 .Produces(StatusCodes.Status200OK)
                 .Produces(StatusCodes.Status204NoContent)
                 .WithName("Hello")
                 .WithTags("hello", "world");
 
-    public IResult Handle()
+    protected override IResult Handle()
     {
         return Results.Ok("Hello World!");
     }
@@ -147,8 +147,33 @@ public record Hello() : GetEndpoint("/hello")
 
 Here is a list of all the available endpoints:
 
-- `GetEndpoint`
-- `PostEndpoint`
-- `PutEndpoint`
-- `DeleteEndpoint`
-- `PatchEndpoint`
+- `Get`
+- `Get<TRequest>`
+- `Get<TRequest, TResponse>`
+- `GetAsync`
+- `GetAsync<TRequest>`
+- `GetAsync<TRequest, TResponse>`
+- `Post`
+- `Post<TRequest>`
+- `Post<TRequest, TResponse>`
+- `PostAsync`
+- `PostAsync<TRequest>`
+- `PostAsync<TRequest, TResponse>`
+- `Put`
+- `Put<TRequest>`
+- `Put<TRequest, TResponse>`
+- `PutAsync`
+- `PutAsync<TRequest>`
+- `PutAsync<TRequest, TResponse>`
+- `Delete`
+- `Delete<TRequest>`
+- `Delete<TRequest, TResponse>`
+- `DeleteAsync`
+- `DeleteAsync<TRequest>`
+- `DeleteAsync<TRequest, TResponse>`
+- `Patch`
+- `Patch<TRequest>`
+- `Patch<TRequest, TResponse>`
+- `PatchAsync`
+- `PatchAsync<TRequest>`
+- `PatchAsync<TRequest, TResponse>`

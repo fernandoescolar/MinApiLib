@@ -20,9 +20,9 @@ public class RequestBody
     public string Country { get; set; }
 }
 
-public record CreateThing() : PostEndpoint<Request>("things")
+public record CreateThing() : PostAsync<Request>("things")
 {
-    protected override void OnConfigure(RouteHandlerBuilder builder)
+    protected override RouteHandlerBuilder Configure(RouteHandlerBuilder builder)
         => builder
                 .Produces<Response>(StatusCodes.Status201Created)
                 .Produces(StatusCodes.Status400BadRequest)
@@ -30,7 +30,7 @@ public record CreateThing() : PostEndpoint<Request>("things")
                 .WithTags("things")
                 .WithValidation();
 
-    protected override async Task<IResult> OnHandleAsync(Request request, CancellationToken cancellationToken)
+    protected override async Task<IResult> HandleAsync(Request request, CancellationToken cancellationToken)
     {
         // async stuff
         return Results.Created($"/things/{1}", request);

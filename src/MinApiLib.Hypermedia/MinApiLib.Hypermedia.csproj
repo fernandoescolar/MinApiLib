@@ -4,5 +4,18 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <OutputType>Library</OutputType>
     <IsPackable>true</IsPackable>
+    <PackageId>MinApiLib.Hypermedia</PackageId>
+    <PackageTags>AspNetCore;api;minimalapi;lib;minapilib;hypermedia</PackageTags>
+    <Authors>Fernando Escolar</Authors>
+    <Description>Hypermedia middleware and base classes for Minimal API.</Description>
+    <PackageProjectUrl>https://github.com/fernandoescolar/MinApiLib</PackageProjectUrl>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
+  <ItemGroup>
+    <None Include=".\README.md" Pack="true" PackagePath="" />
+    <None Include="..\..\LICENSE" Pack="true" PackagePath="" />
+    <None Include="..\..\icon.png" Pack="true" PackagePath="" />
+  </ItemGroup>
 </Project>

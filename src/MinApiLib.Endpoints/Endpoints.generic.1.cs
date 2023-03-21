@@ -1,26 +1,12 @@
 namespace MinApiLib.Endpoints;
 
-public abstract record Endpoint<TInput>(string[] Verbs, string Path) : Endpoint<TInput, IResult>(Verbs, Path)
+public abstract record Endpoint<TRequest>(string[] Verbs, string Path) : Endpoint<TRequest, IResult>(Verbs, Path)
 {
     public Endpoint(string verb, string path) : this(new[] { verb }, path) { }
 }
 
-public abstract record GetEndpoint<TInput>(string path) : Endpoint<TInput>(Constants.Get, path)
-{
-}
-
-public abstract record PostEndpoint<TInput>(string path) : Endpoint<TInput>(Constants.Post, path)
-{
-}
-
-public abstract record PutEndpoint<TInput>(string path) : Endpoint<TInput>(Constants.Put, path)
-{
-}
-
-public abstract record DeleteEndpoint<TInput>(string path) : Endpoint<TInput>(Constants.Delete, path)
-{
-}
-
-public abstract record PatchEndpoint<TInput>(string path) : Endpoint<TInput>(Constants.Patch, path)
-{
-}
+public abstract record Delete<TRequest>(string Path) : Endpoint<TRequest>(Constants.Delete, Path);
+public abstract record Get<TRequest>(string Path) : Endpoint<TRequest>(Constants.Get, Path);
+public abstract record Patch<TRequest>(string Path) : Endpoint<TRequest>(Constants.Patch, Path);
+public abstract record Post<TRequest>(string Path) : Endpoint<TRequest>(Constants.Post, Path);
+public abstract record Put<TRequest>(string Path) : Endpoint<TRequest>(Constants.Put, Path);

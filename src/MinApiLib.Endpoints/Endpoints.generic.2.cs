@@ -1,34 +1,23 @@
 namespace MinApiLib.Endpoints;
 
-public abstract record Endpoint<TInput, TOutput>(string[] Verbs, string Path) : Endpoint(Verbs, Path)
+public abstract record Endpoint<TRequest, TResponse>(string[] Verbs, string Path) : IEndpoint
 {
     public Endpoint(string verb, string path) : this(new[] { verb }, path) { }
 
-    public Task<TOutput> HandleAsync([AsParameters]TInput request, CancellationToken cancellationToken)
-    {
-        cancellationToken.ThrowIfCancellationRequested();
-        return OnHandleAsync(request, cancellationToken);
-    }
+    public RouteHandlerBuilder Configure(IEndpointRouteBuilder builder)
+        => Configure(builder.MapMethods(Path, Verbs, InternalHandler));
 
-    protected abstract Task<TOutput> OnHandleAsync(TInput request, CancellationToken cancellationToken);
+    protected virtual RouteHandlerBuilder Configure(RouteHandlerBuilder builder)
+        => builder;
+
+    protected abstract TResponse Handle(TRequest request);
+
+    private TResponse InternalHandler([AsParameters]TRequest request)
+        => Handle(request);
 }
 
-public abstract record GetEndpoint<TInput, TOutput>(string path) : Endpoint<TInput, TOutput>(Constants.Get, path)
-{
-}
-
-public abstract record PostEndpoint<TInput, TOutput>(string path) : Endpoint<TInput, TOutput>(Constants.Post, path)
-{
-}
-
-public abstract record PutEndpoint<TInput, TOutput>(string path) : Endpoint<TInput, TOutput>(Constants.Put, path)
-{
-}
-
-public abstract record DeleteEndpoint<TInput, TOutput>(string path) : Endpoint<TInput, TOutput>(Constants.Delete, path)
-{
-}
-
-public abstract record PatchEndpoint<TInput, TOutput>(string path) : Endpoint<TInput, TOutput>(Constants.Patch, path)
-{
-}
+public abstract record Delete<TRequest, TResponse>(string Path) : Endpoint<TRequest, TResponse>(Constants.Delete, Path);
+public abstract record Get<TRequest, TResponse>(string Path) : Endpoint<TRequest, TResponse>(Constants.Get, Path);
+public abstract record Patch<TRequest, TResponse>(string Path) : Endpoint<TRequest, TResponse>(Constants.Patch, Path);
+public abstract record Post<TRequest, TResponse>(string Path) : Endpoint<TRequest, TResponse>(Constants.Post, Path);
+public abstract record Put<TRequest, TResponse>(string Path) : Endpoint<TRequest, TResponse>(Constants.Put, Path);

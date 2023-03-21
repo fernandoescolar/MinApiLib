@@ -52,10 +52,9 @@ public record CreateThing() : PostEndpoint<Request>("things")
     protected override void OnConfigure(RouteHandlerBuilder builder)
         => builder
                 .Produces<Response>(StatusCodes.Status201Created)
-                .Produces(StatusCodes.Status400BadRequest)
                 .WithName("CreateThings")
                 .WithTags("things")
-                .WithValidation();
+                .WithValidation(); // invokes .ProducesValidationError()
 
     protected override async Task<IResult> OnHandleAsync(Request request, CancellationToken cancellationToken)
     {

@@ -4,8 +4,21 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <OutputType>Library</OutputType>
     <IsPackable>true</IsPackable>
+    <PackageId>MinApiLib.Validation</PackageId>
+    <PackageTags>AspNetCore;api;minimalapi;lib;minapilib;validation</PackageTags>
+    <Authors>Fernando Escolar</Authors>
+    <Description>Data annotations validation filter for Minimal API</Description>
+    <PackageProjectUrl>https://github.com/fernandoescolar/MinApiLib</PackageProjectUrl>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="MiniValidation" Version="0.7.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".\README.md" Pack="true" PackagePath="" />
+    <None Include="..\..\LICENSE" Pack="true" PackagePath="" />
+    <None Include="..\..\icon.png" Pack="true" PackagePath="" />
   </ItemGroup>
 </Project>
