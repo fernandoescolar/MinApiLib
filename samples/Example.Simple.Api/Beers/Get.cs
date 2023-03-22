@@ -1,13 +1,13 @@
 namespace Example.Simple.Api.Beers;
 
-public record Get() : GetEndpoint("/beers/{id}")
+public record GetBeer() : Get("/beers/{id}")
 {
-    protected override void OnConfigure(RouteHandlerBuilder builder)
+    protected override RouteHandlerBuilder Configure(RouteHandlerBuilder builder)
         => builder
                 .ProducesHypermedia<BeerDetail>(StatusCodes.Status200OK)
                 .Produces<BeerDetail>(StatusCodes.Status200OK)
                 .Produces(StatusCodes.Status404NotFound)
-                .WithName("GetBeer")
+                .WithName(nameof(GetBeer))
                 .WithTags("Beers");
 
     public async Task<IResult> HandleAsync(BeerDbContext db, HashedId id, CancellationToken cancellationToken)

@@ -1,7 +1,7 @@
-# MinApiLib.Hypermedia
-
 [![license](https://img.shields.io/badge/License-MIT-purple.svg)](../../LICENSE)
 [![version](https://img.shields.io/nuget/vpre/MinApiLib.Hypermedia)](https://www.nuget.org/packages/MinApiLib.Hypermedia)
+
+# MinApiLib.Hypermedia
 
 This package contains extensions to use hypermedia in your projects.
 

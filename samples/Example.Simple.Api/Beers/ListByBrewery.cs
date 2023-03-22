@@ -1,14 +1,14 @@
 namespace Example.Simple.Api.Beers;
 
-public record ListByBrewery() : GetEndpoint("/breweries/{id}/beers")
+public record GetBeersByBrewery() : Get("/breweries/{id}/beers")
 {
-    protected override void OnConfigure(RouteHandlerBuilder builder)
+    protected override RouteHandlerBuilder Configure(RouteHandlerBuilder builder)
         => builder
                 .ProducesHypermedia<BeerList>(StatusCodes.Status200OK)
                 .Produces<BeerList>(StatusCodes.Status200OK)
                 .Produces(StatusCodes.Status204NoContent)
                 .Produces(StatusCodes.Status404NotFound)
-                .WithName("GetBeersByBrewery")
+                .WithName(nameof(GetBeersByBrewery))
                 .WithTags("Beers");
 
     public async Task<IResult> HandleAsync(BeerDbContext db, HashedId id, int page = 1, int pageSize = 10, CancellationToken cancellationToken = default)

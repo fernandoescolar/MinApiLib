@@ -1,7 +1,7 @@
-# MinApiLib.Validation
-
 [![license](https://img.shields.io/badge/License-MIT-purple.svg)](../../LICENSE)
 [![version](https://img.shields.io/nuget/vpre/MinApiLib.Validation)](https://www.nuget.org/packages/MinApiLib.Validation)
+
+# MinApiLib.Validation
 
 This package contains extensions to use data annotations in your endpoints. It uses the [MiniValidation](https://github.com/DamianEdwards/MiniValidation) library.
 
@@ -49,7 +49,7 @@ public class RequestBody
 
 public record CreateThing() : PostEndpoint<Request>("things")
 {
-    protected override void OnConfigure(RouteHandlerBuilder builder)
+    protected override RouteHandlerBuilder Configure(RouteHandlerBuilder builder)
         => builder
                 .Produces<Response>(StatusCodes.Status201Created)
                 .WithName("CreateThings")

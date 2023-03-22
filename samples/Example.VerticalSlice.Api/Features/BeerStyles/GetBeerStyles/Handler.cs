@@ -1,15 +1,15 @@
 namespace Example.VerticalSlice.Api.Features.GetBeerStyles;
 
-public record Handler() : GetEndpoint<Request>("/styles")
+public record Handler() : GetHandlerAsync<Request>("/styles")
 {
-    protected override void OnConfigure(RouteHandlerBuilder builder)
+    protected override RouteHandlerBuilder Configure(RouteHandlerBuilder builder)
         => builder
                 .Produces<IEnumerable<Response>>(StatusCodes.Status200OK)
                 .Produces(StatusCodes.Status204NoContent)
                 .WithName("GetBeerStyles")
                 .WithTags("Styles");
 
-    protected override async Task<IResult> OnHandleAsync(Request req, CancellationToken cancellationToken)
+    protected override async Task<IResult> HandleAsync(Request req, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

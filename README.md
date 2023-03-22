@@ -1,3 +1,8 @@
+[![license](https://img.shields.io/badge/License-MIT-purple.svg)](../../LICENSE)
+![This package is compatible with this framework or higher](https://img.shields.io/badge/.Net-7.0-blue)
+![release action](https://github.com/fernandoescolar/MinApiLib/actions/workflows/release.yml/badge.svg)
+![ci action](https://github.com/fernandoescolar/MinApiLib/actions/workflows/ci.yml/badge.svg)
+
 # MinApiLib
 
 Asp.Net Core >=7 Minimal Api Library with extensions, filters, and utilities to create easy cool APIs.
@@ -7,13 +12,13 @@ Asp.Net Core >=7 Minimal Api Library with extensions, filters, and utilities to 
 MinApiLib provides the following packages:
 
 
-- [MinApiLib.DependencyInjection](src/MinApiLib.DependencyInjection/README.md) ![version](https://img.shields.io/nuget/vpre/MinApiLib.DependencyInjection)
-- [MinApiLib.Endpoints](src/MinApiLib.Endpoints/README.md) ![version](https://img.shields.io/nuget/vpre/MinApiLib.Endpoints)
-- [MinApiLib.HashedIds](src/MinApiLib.HashedIds/README.md) ![version](https://img.shields.io/nuget/vpre/MinApiLib.HashedIds)
-- [MinApiLib.Hypermedia](src/MinApiLib.Hypermedia/README.md) ![version](https://img.shields.io/nuget/vpre/MinApiLib.Hypermedia)
-- [MinApiLib.Logging](src/MinApiLib.Logging/README.md) ![version](https://img.shields.io/nuget/vpre/MinApiLib.Logging)
-- [MinApiLib.OperationCanceled](src/MinApiLib.OperationCanceled/README.md) ![version](https://img.shields.io/nuget/vpre/MinApiLib.OperationCanceled)
-- [MinApiLib.Validation](src/MinApiLib.Validation/README.md) ![version](https://img.shields.io/nuget/vpre/MinApiLib.Validation)
+- [MinApiLib.DependencyInjection](src/MinApiLib.DependencyInjection/README.md) [![version](https://img.shields.io/nuget/vpre/MinApiLib.DependencyInjection)](https://www.nuget.org/packages/MinApiLib.DependencyInjection)
+- [MinApiLib.Endpoints](src/MinApiLib.Endpoints/README.md) [![version](https://img.shields.io/nuget/vpre/MinApiLib.Endpoints)](https://www.nuget.org/packages/MinApiLib.Endpoints)
+- [MinApiLib.HashedIds](src/MinApiLib.HashedIds/README.md) [![version](https://img.shields.io/nuget/vpre/MinApiLib.HashedIds)](https://www.nuget.org/packages/MinApiLib.HashedIds)
+- [MinApiLib.Hypermedia](src/MinApiLib.Hypermedia/README.md) [![version](https://img.shields.io/nuget/vpre/MinApiLib.Hypermedia)](https://www.nuget.org/packages/MinApiLib.Hypermedia)
+- [MinApiLib.Logging](src/MinApiLib.Logging/README.md) [![version](https://img.shields.io/nuget/vpre/MinApiLib.Logging)](https://www.nuget.org/packages/MinApiLib.Logging)
+- [MinApiLib.OperationCanceled](src/MinApiLib.OperationCanceled/README.md) [![version](https://img.shields.io/nuget/vpre/MinApiLib.OperationCanceled)](https://www.nuget.org/packages/MinApiLib.OperationCanceled)
+- [MinApiLib.Validation](src/MinApiLib.Validation/README.md) [![version](https://img.shields.io/nuget/vpre/MinApiLib.Validation)](https://www.nuget.org/packages/MinApiLib.Validation)
 
 To install the packages, run the following command in the Package Manager Console:
 

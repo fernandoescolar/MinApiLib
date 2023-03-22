@@ -1,7 +1,7 @@
-# MinApiLib.OperationCanceled
-
 [![license](https://img.shields.io/badge/License-MIT-purple.svg)](../../LICENSE)
 [![version](https://img.shields.io/nuget/vpre/MinApiLib.OperationCanceled)](https://www.nuget.org/packages/MinApiLib.OperationCanceled)
+
+# MinApiLib.OperationCanceled
 
 This package contains extensions to handle `OperationCanceledException` in your endpoints and creates `499` status code response.
 

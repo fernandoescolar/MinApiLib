@@ -1,7 +1,7 @@
-# MinApiLib.Logging
-
 [![license](https://img.shields.io/badge/License-MIT-purple.svg)](../../LICENSE)
 [![version](https://img.shields.io/nuget/vpre/MinApiLib.Logging)](https://www.nuget.org/packages/MinApiLib.Logging)
+
+# MinApiLib.Logging
 
 This package contains extensions to use fast logging in your projects. It uses the best practices from [this Microsoft's article](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/logging/loggermessage?view=aspnetcore-7.0).
 

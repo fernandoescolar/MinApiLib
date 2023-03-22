@@ -1,7 +1,7 @@
-# MinApiLib.HashedIds
-
 [![license](https://img.shields.io/badge/License-MIT-purple.svg)](../../LICENSE)
 [![version](https://img.shields.io/nuget/vpre/MinApiLib.HashedIds)](https://www.nuget.org/packages/MinApiLib.HashedIds)
+
+# MinApiLib.HashedIds
 
 This package contains extensions to use hashed ids in your endpoints. It uses the [Hashids](https://hashids.org/) library.
 

@@ -13,7 +13,7 @@ public static class LoggerExtensions
     private static readonly Action<ILogger, string, Exception?> _loggerMessageWarning = LoggerMessage.Define<string>(LogLevel.Warning, new EventId(600, nameof(LogLevel.Warning)), "{Message}");
 
     [MethodImpl(MethodImplOptions.NoInlining)]
-    public static void LogFaster(ILogger logger, LogLevel logLevel, string message, Exception? ex)
+    public static void LogFaster(this ILogger logger, LogLevel logLevel, string message, Exception? ex)
     {
         ArgumentNullException.ThrowIfNull(logger);
         ArgumentNullException.ThrowIfNull(message);
@@ -32,7 +32,7 @@ public static class LoggerExtensions
     }
 
     [MethodImpl(MethodImplOptions.NoInlining)]
-    public static void Critical(ILogger logger, string message, Exception? ex)
+    public static void Critical(this ILogger logger, string message, Exception? ex)
     {
         ArgumentNullException.ThrowIfNull(logger);
         ArgumentNullException.ThrowIfNull(message);
@@ -40,7 +40,7 @@ public static class LoggerExtensions
     }
 
     [MethodImpl(MethodImplOptions.NoInlining)]
-    public static void Debug(ILogger logger, string message)
+    public static void Debug(this ILogger logger, string message)
     {
         ArgumentNullException.ThrowIfNull(logger);
         ArgumentNullException.ThrowIfNull(message);
@@ -48,7 +48,7 @@ public static class LoggerExtensions
     }
 
     [MethodImpl(MethodImplOptions.NoInlining)]
-    public static void Error(ILogger logger, string message, Exception? ex)
+    public static void Error(this ILogger logger, string message, Exception? ex)
     {
         ArgumentNullException.ThrowIfNull(logger);
         ArgumentNullException.ThrowIfNull(message);
@@ -56,7 +56,7 @@ public static class LoggerExtensions
     }
 
     [MethodImpl(MethodImplOptions.NoInlining)]
-    public static void Information(ILogger logger, string message)
+    public static void Information(this ILogger logger, string message)
     {
         ArgumentNullException.ThrowIfNull(logger);
         ArgumentNullException.ThrowIfNull(message);
@@ -64,7 +64,7 @@ public static class LoggerExtensions
     }
 
     [MethodImpl(MethodImplOptions.NoInlining)]
-    public static void Trace(ILogger logger, string message)
+    public static void Trace(this ILogger logger, string message)
     {
         ArgumentNullException.ThrowIfNull(logger);
         ArgumentNullException.ThrowIfNull(message);
@@ -72,7 +72,7 @@ public static class LoggerExtensions
     }
 
     [MethodImpl(MethodImplOptions.NoInlining)]
-    public static void Warning(ILogger logger, string message, Exception? ex)
+    public static void Warning(this ILogger logger, string message, Exception? ex)
     {
         ArgumentNullException.ThrowIfNull(logger);
         ArgumentNullException.ThrowIfNull(message);

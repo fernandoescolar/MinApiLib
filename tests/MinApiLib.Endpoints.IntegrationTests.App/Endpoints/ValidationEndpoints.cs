@@ -20,7 +20,7 @@ public class RequestBody
     public string Country { get; set; }
 }
 
-public record CreateThing() : PostAsync<Request>("things")
+public record CreateThing() : PostHandlerAsync<Request>("things")
 {
     protected override RouteHandlerBuilder Configure(RouteHandlerBuilder builder)
         => builder
@@ -30,9 +30,9 @@ public record CreateThing() : PostAsync<Request>("things")
                 .WithTags("things")
                 .WithValidation();
 
-    protected override async Task<IResult> HandleAsync(Request request, CancellationToken cancellationToken)
+    protected override Task<IResult> HandleAsync(Request request, CancellationToken cancellationToken)
     {
         // async stuff
-        return Results.Created($"/things/{1}", request);
+        return Task.FromResult(Results.Created($"/things/{1}", request));
     }
 }

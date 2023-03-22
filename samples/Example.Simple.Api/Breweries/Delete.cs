@@ -1,12 +1,12 @@
 namespace Example.Simple.Api.Breweries;
 
-public record Delete() : DeleteEndpoint("/breweries/{id}")
+public record DeleteBrewery() : Delete("/breweries/{id}")
 {
-    protected override void OnConfigure(RouteHandlerBuilder builder)
+    protected override RouteHandlerBuilder Configure(RouteHandlerBuilder builder)
         => builder
                 .Produces(StatusCodes.Status204NoContent)
                 .Produces(StatusCodes.Status404NotFound)
-                .WithName("DeleteBrewery")
+                .WithName(nameof(DeleteBrewery))
                 .WithTags("Breweries");
 
     public async Task<IResult> HandleAsync(BeerDbContext db, HashedId id, CancellationToken cancellationToken)

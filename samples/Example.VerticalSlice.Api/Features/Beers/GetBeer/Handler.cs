@@ -1,8 +1,8 @@
 namespace Example.VerticalSlice.Api.Features.GetBeer;
 
-public record Handler() : GetEndpoint<Request>("/beers/{id}")
+public record Handler() : GetHandlerAsync<Request>("/beers/{id}")
 {
-    protected override void OnConfigure(RouteHandlerBuilder builder)
+    protected override RouteHandlerBuilder Configure(RouteHandlerBuilder builder)
         => builder
                 .ProducesHypermedia<Response>(StatusCodes.Status200OK)
                 .Produces<Response>(StatusCodes.Status200OK)
@@ -10,7 +10,7 @@ public record Handler() : GetEndpoint<Request>("/beers/{id}")
                 .WithName("GetBeer")
                 .WithTags("Beers");
 
-    protected override async Task<IResult> OnHandleAsync(Request query, CancellationToken cancellationToken)
+    protected override async Task<IResult> HandleAsync(Request query, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

@@ -1,14 +1,14 @@
 namespace Example.Simple.Api.Breweries;
 
-public record Post() : AbstractUpsert("POST", "/breweries")
+public record CreateBrewery() : AbstractUpsert("POST", "/breweries")
 {
-    protected override void OnConfigure(RouteHandlerBuilder builder)
+    protected override RouteHandlerBuilder Configure(RouteHandlerBuilder builder)
         => builder
                 .ProducesHypermedia<BreweryDetail>(StatusCodes.Status201Created)
                 .Produces<BreweryDetail>(StatusCodes.Status201Created)
                 .Produces(StatusCodes.Status204NoContent)
                 .Produces(StatusCodes.Status400BadRequest)
-                .WithName("CreateBrewery")
+                .WithName(nameof(CreateBrewery))
                 .WithTags("Breweries")
                 .WithValidation();
 

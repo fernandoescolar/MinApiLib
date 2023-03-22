@@ -1,10 +1,10 @@
-namespace MinApiLib.Endpoints.IntegrationTests.App.Endpoints.Thing;
+namespace MinApiLib.Endpoints.IntegrationTests.App.Endpoints.HashedIdEndpoints;
 
 public record struct Request(HashedId Id, CancellationToken CancellationToken);
 
 public record struct Response(HashedId Id, string Name);
 
-public record GetThing() : Get<Request>("/things/{id}")
+public record GetHashedIdEndpoints() : GetHandler<Request>("/things/{id}")
 {
     protected override IResult Handle(Request request)
     {

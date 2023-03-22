@@ -1,7 +1,7 @@
-# MinApiLib.DependencyInjection
-
 [![license](https://img.shields.io/badge/License-MIT-purple.svg)](../../LICENSE)
 [![version](https://img.shields.io/nuget/vpre/MinApiLib.DependencyInjection)](https://www.nuget.org/packages/MinApiLib.DependencyInjection)
+
+# MinApiLib.DependencyInjection
 
 This package contains extensions to register services in the DI container using Attributes.
 

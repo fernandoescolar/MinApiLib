@@ -12,7 +12,7 @@ public class ResponseHypermediaProvider : HypermediaProvider<Response>
 }
 
 public record struct Request(int Id);
-public record GetThing() : Get<Request>("/things2/{id}")
+public record GetThing() : GetHandler<Request>("/things2/{id}")
 {
     protected override IResult Handle(Request req)
         => Results.Ok(new Response(req.Id, "John Doe"));
