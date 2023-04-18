@@ -5,15 +5,15 @@ public abstract record EndpointHandler<TRequest, TResponse>(string[] Verbs, stri
     public EndpointHandler(string verb, string path) : this(new[] { verb }, path) { }
 
     public RouteHandlerBuilder Configure(IEndpointRouteBuilder builder)
-        => Configure(builder.MapMethods(Path, Verbs, InternalHandler));
+        => Configure(builder.MapMethods(Path, Verbs, Delegate));
+
+    public TResponse Delegate([AsParameters]TRequest request)
+        => Handle(request);
 
     protected virtual RouteHandlerBuilder Configure(RouteHandlerBuilder builder)
         => builder;
 
     protected abstract TResponse Handle(TRequest request);
-
-    private TResponse InternalHandler([AsParameters]TRequest request)
-        => Handle(request);
 }
 
 public abstract record DeleteHandler<TRequest, TResponse>(string Path) : EndpointHandler<TRequest, TResponse>(Constants.Delete, Path);

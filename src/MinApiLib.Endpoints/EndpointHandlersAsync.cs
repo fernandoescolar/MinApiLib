@@ -5,15 +5,15 @@ public abstract record EndpointHandlerAsync(string[] Verbs, string Path) : IEndp
     public EndpointHandlerAsync(string verb, string path) : this(new[] { verb }, path) { }
 
     public RouteHandlerBuilder Configure(IEndpointRouteBuilder builder)
-        => Configure(builder.MapMethods(Path, Verbs, InternalHandlerAsync));
+        => Configure(builder.MapMethods(Path, Verbs, DelegateAsync));
+
+    public Task<IResult> DelegateAsync(CancellationToken cancellationToken)
+        => HandleAsync(cancellationToken);
 
     protected virtual RouteHandlerBuilder Configure(RouteHandlerBuilder builder)
         => builder;
 
     protected abstract Task<IResult> HandleAsync(CancellationToken cancellationToken);
-
-    private Task<IResult> InternalHandlerAsync(CancellationToken cancellationToken)
-        => HandleAsync(cancellationToken);
 }
 
 public abstract record DeleteHandlerAsync(string Path) : EndpointHandlerAsync(Constants.Delete, Path);

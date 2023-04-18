@@ -5,15 +5,15 @@ public abstract record EndpointHandler(string[] Verbs, string Path) : IEndpoint
     public EndpointHandler(string verb, string path) : this(new[] { verb }, path) { }
 
     public RouteHandlerBuilder Configure(IEndpointRouteBuilder builder)
-        => Configure(builder.MapMethods(Path, Verbs, InternalHandler));
+        => Configure(builder.MapMethods(Path, Verbs, Delegate));
+
+    public IResult Delegate()
+        => Handle();
 
     protected virtual RouteHandlerBuilder Configure(RouteHandlerBuilder builder)
         => builder;
 
     protected abstract IResult Handle();
-
-    private IResult InternalHandler()
-        => Handle();
 }
 
 public abstract record DeleteHandler(string Path) : EndpointHandler(Constants.Delete, Path);

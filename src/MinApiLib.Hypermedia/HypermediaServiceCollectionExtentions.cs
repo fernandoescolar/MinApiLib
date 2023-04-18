@@ -8,7 +8,7 @@ public static class HypermediaServiceCollectionExtentions
         assembly.GetHypermediaProviders().ToList().ForEach(t => services.AddScoped(typeof(IHypermediaProvider), t));
         services.AddScoped<HypermediaConverter>();
         services.AddSingleton(_ => new HypermediaOptions(contentType));
-
+        HypermediaConstants.ConfiguredContentType = contentType;
         return services;
     }
 

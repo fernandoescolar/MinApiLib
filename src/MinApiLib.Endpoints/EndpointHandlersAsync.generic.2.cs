@@ -5,15 +5,15 @@ public abstract record EndpointHandlerAsync<TRequest, TResponse>(string[] Verbs,
     public EndpointHandlerAsync(string verb, string path) : this(new[] { verb }, path) { }
 
     public RouteHandlerBuilder Configure(IEndpointRouteBuilder builder)
-        => Configure(builder.MapMethods(Path, Verbs, InternalHandlerAsync));
+        => Configure(builder.MapMethods(Path, Verbs, DelegateAsync));
+
+    public Task<TResponse> DelegateAsync([AsParameters]TRequest request, CancellationToken cancellationToken)
+        => HandleAsync(request, cancellationToken);
 
     protected virtual RouteHandlerBuilder Configure(RouteHandlerBuilder builder)
         => builder;
 
     protected abstract Task<TResponse> HandleAsync(TRequest request, CancellationToken cancellationToken);
-
-    private Task<TResponse> InternalHandlerAsync([AsParameters]TRequest request, CancellationToken cancellationToken)
-        => HandleAsync(request, cancellationToken);
 }
 
 public abstract record DeleteHandlerAsync<TRequest, TResponse>(string Path) : EndpointHandlerAsync<TRequest, TResponse>(Constants.Delete, Path);
