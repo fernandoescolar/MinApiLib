@@ -2,28 +2,23 @@ namespace MinApiLib.Endpoints;
 
 public static class EndpointsExtensions
 {
+    private static List<IEndpoint> _endpoints = new();
+
     public static RouteGroupBuilder MapEndpoints(this IEndpointRouteBuilder endpoints, Assembly assembly = null)
     {
+        _endpoints.Clear();
+
         var logger = endpoints.ServiceProvider.GetRequiredService<ILogger<IEndpoint>>();
         var group = endpoints.MapGroup("/");
         foreach (var t in GetEndpoints(assembly ?? Assembly.GetCallingAssembly()))
         {
             logger.LogDebug("Mapping endpoint {Endpoint}", t.FullName);
-            group.MapEndpoint(t);
+            var endpoint = ActivatorUtilities.CreateInstance(endpoints.ServiceProvider, t) as IEndpoint;
+            endpoint.Configure(group);
+            _endpoints.Add(endpoint);
         }
 
         return group;
-    }
-
-    private static RouteHandlerBuilder MapEndpoint(this RouteGroupBuilder builder, Type type)
-    {
-        if (!type.GetConstructors().Any(c => c.GetParameters().Length == 0))
-        {
-            throw new InvalidOperationException($"Endpoint type {type.FullName} must have a parameterless constructor.");
-        }
-
-        var endpoint = Activator.CreateInstance(type, new object[] { }) as IEndpoint;
-        return endpoint.Configure(builder);
     }
 
     private static IEnumerable<Type> GetEndpoints(Assembly assembly)
