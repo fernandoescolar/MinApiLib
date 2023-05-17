@@ -32,7 +32,7 @@ public static class LoggerExtensions
     }
 
     [MethodImpl(MethodImplOptions.NoInlining)]
-    public static void Critical(this ILogger logger, string message, Exception? ex)
+    public static void Critical(this ILogger logger, string message, Exception? ex = default)
     {
         ArgumentNullException.ThrowIfNull(logger);
         ArgumentNullException.ThrowIfNull(message);
@@ -48,7 +48,7 @@ public static class LoggerExtensions
     }
 
     [MethodImpl(MethodImplOptions.NoInlining)]
-    public static void Error(this ILogger logger, string message, Exception? ex)
+    public static void Error(this ILogger logger, string message, Exception? ex = default)
     {
         ArgumentNullException.ThrowIfNull(logger);
         ArgumentNullException.ThrowIfNull(message);
@@ -72,7 +72,7 @@ public static class LoggerExtensions
     }
 
     [MethodImpl(MethodImplOptions.NoInlining)]
-    public static void Warning(this ILogger logger, string message, Exception? ex)
+    public static void Warning(this ILogger logger, string message, Exception? ex = default)
     {
         ArgumentNullException.ThrowIfNull(logger);
         ArgumentNullException.ThrowIfNull(message);
