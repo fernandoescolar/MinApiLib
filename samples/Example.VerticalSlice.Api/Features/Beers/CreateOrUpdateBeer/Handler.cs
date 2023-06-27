@@ -4,9 +4,8 @@ public record Handler() : PutHandlerAsync<Request>("/beers/{id}")
 {
     protected override RouteHandlerBuilder Configure(RouteHandlerBuilder builder)
         => builder
-                .ProducesHypermedia<Response>(StatusCodes.Status201Created)
-                .Produces<Response>(StatusCodes.Status201Created)
-                .Produces(StatusCodes.Status204NoContent)
+                .ProducesHypermedia<Response>(StatusCodes.Status200OK)
+                .Produces<Response>(StatusCodes.Status200OK)
                 .Produces(StatusCodes.Status400BadRequest)
                 .WithName("CreateOrUpdateBeer")
                 .WithTags("Beers")
