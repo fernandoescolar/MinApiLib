@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinApiLib.Endpoints.Integra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinApiLib.DependencyInjection.Tests", "tests\MinApiLib.DependencyInjection.Tests\MinApiLib.DependencyInjection.Tests.csproj", "{377E5DC4-C433-46B1-8EA9-1584C69CD2FD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinApiLib.Endpoints.Aot", "src\MinApiLib.Endpoints.Aot\MinApiLib.Endpoints.Aot.csproj", "{39E8C7D9-A01A-48D3-B7F1-EFBBAF0BC811}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -82,6 +84,10 @@ Global
 		{377E5DC4-C433-46B1-8EA9-1584C69CD2FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{377E5DC4-C433-46B1-8EA9-1584C69CD2FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{377E5DC4-C433-46B1-8EA9-1584C69CD2FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39E8C7D9-A01A-48D3-B7F1-EFBBAF0BC811}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39E8C7D9-A01A-48D3-B7F1-EFBBAF0BC811}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39E8C7D9-A01A-48D3-B7F1-EFBBAF0BC811}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39E8C7D9-A01A-48D3-B7F1-EFBBAF0BC811}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{D9336C23-C46E-4B23-A2AE-B0A53F2F8A94} = {90AF23FF-AE78-4764-9000-70260459842D}
@@ -95,5 +101,6 @@ Global
 		{56231D50-CD2F-43EB-992C-42A120563600} = {90AF23FF-AE78-4764-9000-70260459842D}
 		{D16C7865-DF8E-43AB-9051-9750D8DA0A41} = {CD8CA574-4588-4404-B7A3-9E85A7B5B0E7}
 		{377E5DC4-C433-46B1-8EA9-1584C69CD2FD} = {CD8CA574-4588-4404-B7A3-9E85A7B5B0E7}
+		{39E8C7D9-A01A-48D3-B7F1-EFBBAF0BC811} = {90AF23FF-AE78-4764-9000-70260459842D}
 	EndGlobalSection
 EndGlobal

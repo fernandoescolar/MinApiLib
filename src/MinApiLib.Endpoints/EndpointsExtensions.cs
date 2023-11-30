@@ -4,6 +4,15 @@ public static class EndpointsExtensions
 {
     private static List<IEndpoint> _endpoints = new();
 
+    public static RouteHandlerBuilder MapEndpoint<T>(this IEndpointRouteBuilder endpoints) where T: IEndpoint, new()
+    {
+        var endpoint = new T();
+        var result = endpoint.Configure(endpoints);
+        _endpoints.Add(endpoint);
+        return result;
+    }
+
+    [RequiresUnreferencedCode("Use 'MapAotEndpoints' instead. You should install MinApiLib.Endpoints.Aot source generators to use it.")]
     public static RouteGroupBuilder MapEndpoints(this IEndpointRouteBuilder endpoints, Assembly assembly = null)
     {
         _endpoints.Clear();
@@ -21,6 +30,7 @@ public static class EndpointsExtensions
         return group;
     }
 
+    [RequiresUnreferencedCode("This mehod is called from 'MapEndpoints', use 'MapAotEndpoints' instead. You should install MinApiLib.Endpoints.Aot source generators to use it.")]
     private static IEnumerable<Type> GetEndpoints(Assembly assembly)
         => assembly.GetTypes()
                    .Where(t => t.IsClass && !t.IsAbstract && typeof(IEndpoint).IsAssignableFrom(t));
