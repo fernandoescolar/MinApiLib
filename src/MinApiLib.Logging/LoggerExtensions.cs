@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 
 namespace MinApiLib.Logging;
 
+[Obsolete("Use LoggerMessageAttribute(https://learn.microsoft.com/en-us/dotnet/core/extensions/logger-message-generator) instead")]
 public static class LoggerExtensions
 {
     private static readonly Action<ILogger, string, Exception?> _loggerMessageCritical = LoggerMessage.Define<string>(LogLevel.Critical, new EventId(100, nameof(LogLevel.Critical)), "{Critical}");
