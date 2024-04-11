@@ -1,0 +1,23 @@
+{
+  "Alias": "minapilib",
+  "Description": "Generates a MinApiLib endpoints.",
+  "Arguments": [
+    {
+      "Name": "-m|--model",
+      "Description": "Model class to use"
+    },
+    {
+      "Name": "-dc|--dataContext",
+      "Description": "DbContext class to use"
+    },
+    {
+      "Name": "-outDir|--relativeFolderPath",
+      "Description": "Specify the relative output folder path from project where the file needs to be generated, if not specified, file will be generated in the project folder"
+    },
+    {
+      "Name": "databaseProvider",
+      "Description": "Database provider to use. Options include 'sqlserver' (default), 'sqlite', 'cosmos', 'postgres'."
+    }
+  ],
+  "Options": [ ]
+}

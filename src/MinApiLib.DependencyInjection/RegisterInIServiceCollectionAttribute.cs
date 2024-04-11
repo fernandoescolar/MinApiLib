@@ -1,24 +1,26 @@
 ﻿namespace MinApiLib.DependencyInjection;
 
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
-public class RegisterInIServiceCollectionAttribute : Attribute
+public sealed class RegisterInIServiceCollectionAttribute : Attribute
 {
-    public RegisterInIServiceCollectionAttribute()
+    private readonly Type[] _types;
+    public RegisterInIServiceCollectionAttribute(params Type[] types)
     {
+        _types = types;
     }
 
     public RegisterInIServiceCollectionAttribute(Type type)
     {
-        Type = type;
+        _types = new []{ type };
     }
 
     public RegisterInIServiceCollectionAttribute(Type type, ServiceLifetime serviceLifetime)
+        : this(type)
     {
-        Type = type;
         ServiceLifetime = serviceLifetime;
     }
 
-    public Type Type { get; protected set; }
+    internal IEnumerable<Type> Types => _types;
 
     public ServiceLifetime ServiceLifetime { get; set; } = ServiceLifetime.Transient;
 }
