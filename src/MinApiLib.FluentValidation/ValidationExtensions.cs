@@ -1,52 +1,29 @@
-using Microsoft.Extensions.DependencyInjection.Extensions;
-
 namespace MinApiLib.FluentValidation;
 
 public static class ValidationExtensions
 {
-    public static RouteHandlerBuilder WithValidation<T>(this RouteHandlerBuilder builder)
+    public static RouteHandlerBuilder ProducesValidationError(this RouteHandlerBuilder builder)
     {
-        return builder.AddEndpointFilter<ValidationFilter<T>>();
+        builder.Produces<IDictionary<string, string[]>>(StatusCodes.Status400BadRequest);
+        return builder;
     }
+
+    public static RouteHandlerBuilder WithValidation<T>(this RouteHandlerBuilder builder)
+        => builder.AddEndpointFilter<ValidationFilter<T>>()
+                  .ProducesValidationError();
 
     public static RouteHandlerBuilder WithValidation(this RouteHandlerBuilder builder)
-    {
-        return builder.AddEndpointFilterFactory((context, next) =>
-        {
-            var argType = context.MethodInfo.GetParameters().FirstOrDefault()?.ParameterType;
-            if (argType is null)
+        => builder.AddEndpointFilterFactory((context, next) =>
             {
-                return invocationContext => next(invocationContext);
-            }
-
-            var filterType = typeof(ValidationFilter<>).MakeGenericType(argType);
-            var filter = (IEndpointFilter)context.ApplicationServices.GetRequiredService(filterType);
-            return invocationContext => filter.InvokeAsync(invocationContext, next);
-        });
-    }
-
-    public static IServiceCollection AddValidation(this IServiceCollection services, ServiceLifetime lifetime = ServiceLifetime.Singleton)
-    {
-        var serviceDescriptor = ServiceDescriptor.Describe(typeof(ValidationFilter<>), typeof(ValidationFilter<>), lifetime);
-        services.TryAdd(serviceDescriptor);
-        return services;
-    }
-
-    public static IServiceCollection AddValidatorsFromAssembly(this IServiceCollection services, Assembly? assembly = null)
-    {
-        assembly ??= Assembly.GetCallingAssembly();
-        foreach(var type in assembly.GetTypes().Where(x => !x.IsAbstract && !x.IsInterface))
-        {
-            foreach(var interfaceType in type.GetInterfaces())
-            {
-                if (interfaceType.IsGenericType && interfaceType.GetGenericTypeDefinition() == typeof(IValidator<>))
+                var argType = context.MethodInfo.GetParameters().FirstOrDefault()?.ParameterType;
+                if (argType is null)
                 {
-                    services.AddTransient(interfaceType, type);
+                    return invocationContext => next(invocationContext);
                 }
-            }
-        }
 
-        services.AddValidation();
-        return services;
-    }
+                var filterType = typeof(ValidationFilter<>).MakeGenericType(argType);
+                var filter = (IEndpointFilter)context.ApplicationServices.GetRequiredService(filterType);
+                return invocationContext => filter.InvokeAsync(invocationContext, next);
+            })
+            .ProducesValidationError();
 }
