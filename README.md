@@ -19,6 +19,7 @@ MinApiLib provides the following packages:
 - [MinApiLib.Logging](src/MinApiLib.Logging/README.md) [![version](https://img.shields.io/nuget/vpre/MinApiLib.Logging)](https://www.nuget.org/packages/MinApiLib.Logging)
 - [MinApiLib.OperationCanceled](src/MinApiLib.OperationCanceled/README.md) [![version](https://img.shields.io/nuget/vpre/MinApiLib.OperationCanceled)](https://www.nuget.org/packages/MinApiLib.OperationCanceled)
 - [MinApiLib.Validation](src/MinApiLib.Validation/README.md) [![version](https://img.shields.io/nuget/vpre/MinApiLib.Validation)](https://www.nuget.org/packages/MinApiLib.Validation)
+- [MinApiLib.FluentValidation](src/MinApiLib.FluentValidation/README.md) [![version](https://img.shields.io/nuget/vpre/MinApiLib.FluentValidation)](https://www.nuget.org/packages/MinApiLib.FluentValidation)
 
 To install the packages, run the following command in the Package Manager Console:
 
@@ -42,6 +43,7 @@ dotnet add package MinApiLib.Hypermedia
 dotnet add package MinApiLib.Logging
 dotnet add package MinApiLib.OperationCanceled
 dotnet add package MinApiLib.Validation
+dotnet add package MinApiLib.FluentValidation
 ```
 
 Take a look at the [samples](samples) folder to see how to use the packages.
