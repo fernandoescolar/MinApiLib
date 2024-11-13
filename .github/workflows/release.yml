@@ -86,7 +86,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Clenup artifacts
     steps:
-      - uses: geekyeggo/delete-artifact@v1
+      - uses: geekyeggo/delete-artifact@v5
         with:
           name: |
             nupkg
