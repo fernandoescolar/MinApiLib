@@ -14,7 +14,7 @@ jobs:
     name: Build MinApiLib
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v4
         with:
@@ -75,8 +75,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          name: ${{ steps.vars.outputs.tag }}
-          release_name: Release ${{ steps.vars.outputs.tag }}
+          name: Release ${{ steps.vars.outputs.tag }}
+          tag_name: ${{ steps.vars.outputs.tag }}
           draft: false
           prerelease: false
           files: |
