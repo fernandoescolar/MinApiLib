@@ -4,10 +4,9 @@
     <ProjectReference Include="..\..\src\MinApiLib.HashedIds\MinApiLib.HashedIds.csproj" />
     <ProjectReference Include="..\..\src\MinApiLib.Hypermedia\MinApiLib.Hypermedia.csproj" />
     <ProjectReference Include="..\..\src\MinApiLib.Validation\MinApiLib.Validation.csproj" />
-    <ProjectReference Include="..\..\src\MinApiLib.Logging\MinApiLib.Logging.csproj" />
   </ItemGroup>
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 </Project>

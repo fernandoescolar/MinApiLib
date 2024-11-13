@@ -1,5 +1,6 @@
 [![license](https://img.shields.io/badge/License-MIT-purple.svg)](../../LICENSE)
-![This package is compatible with this framework or higher](https://img.shields.io/badge/.Net-7.0-blue)
+![This package is compatible with this framework or higher](https://img.shields.io/badge/.Net-8.0-blue)
+![This package is compatible with this framework or higher](https://img.shields.io/badge/.Net-9.0-blue)
 ![release action](https://github.com/fernandoescolar/MinApiLib/actions/workflows/release.yml/badge.svg)
 ![ci action](https://github.com/fernandoescolar/MinApiLib/actions/workflows/ci.yml/badge.svg)
 
@@ -16,7 +17,6 @@ MinApiLib provides the following packages:
 - [MinApiLib.Endpoints](src/MinApiLib.Endpoints/README.md) [![version](https://img.shields.io/nuget/vpre/MinApiLib.Endpoints)](https://www.nuget.org/packages/MinApiLib.Endpoints)
 - [MinApiLib.HashedIds](src/MinApiLib.HashedIds/README.md) [![version](https://img.shields.io/nuget/vpre/MinApiLib.HashedIds)](https://www.nuget.org/packages/MinApiLib.HashedIds)
 - [MinApiLib.Hypermedia](src/MinApiLib.Hypermedia/README.md) [![version](https://img.shields.io/nuget/vpre/MinApiLib.Hypermedia)](https://www.nuget.org/packages/MinApiLib.Hypermedia)
-- [MinApiLib.Logging](src/MinApiLib.Logging/README.md) [![version](https://img.shields.io/nuget/vpre/MinApiLib.Logging)](https://www.nuget.org/packages/MinApiLib.Logging)
 - [MinApiLib.OperationCanceled](src/MinApiLib.OperationCanceled/README.md) [![version](https://img.shields.io/nuget/vpre/MinApiLib.OperationCanceled)](https://www.nuget.org/packages/MinApiLib.OperationCanceled)
 - [MinApiLib.Validation](src/MinApiLib.Validation/README.md) [![version](https://img.shields.io/nuget/vpre/MinApiLib.Validation)](https://www.nuget.org/packages/MinApiLib.Validation)
 - [MinApiLib.FluentValidation](src/MinApiLib.FluentValidation/README.md) [![version](https://img.shields.io/nuget/vpre/MinApiLib.FluentValidation)](https://www.nuget.org/packages/MinApiLib.FluentValidation)
@@ -40,7 +40,6 @@ dotnet add package MinApiLib.DependencyInjection
 dotnet add package MinApiLib.Endpoints
 dotnet add package MinApiLib.HashedIds
 dotnet add package MinApiLib.Hypermedia
-dotnet add package MinApiLib.Logging
 dotnet add package MinApiLib.OperationCanceled
 dotnet add package MinApiLib.Validation
 dotnet add package MinApiLib.FluentValidation
