@@ -30,7 +30,7 @@ jobs:
           VERSION_SUFFIX="${ARRAY_VERSION[1]}"
           dotnet pack -c Release -o nupkg ./MinApiLib.sln -p:AssemblyVersion=$VERSION -p:VersionPrefix=$VERSION -p:VersionSuffix=$VERSION_SUFFIX -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: nupkg
           path: ./nupkg/*.*
@@ -41,7 +41,7 @@ jobs:
     name: Publish MinApiLib
     steps:
       - name: Download Artifact
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v4
         with:
           name: nupkg
       - name: Setup .NET Core
@@ -59,7 +59,7 @@ jobs:
     name: Add artifacts to release
     steps:
       - name: Download Artifact
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v4
         with:
           name: nupkg
       - name: Get Version
