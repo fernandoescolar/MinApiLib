@@ -5,6 +5,9 @@ on:
 
 name: New Release
 
+permissions:
+  contents: write
+
 jobs:
   pack:
     runs-on: ubuntu-latest
@@ -13,7 +16,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Setup .NET Core
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: |
             8.0.x
@@ -44,8 +47,9 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: nupkg
+          path: ./nupkg
       - name: Setup .NET Core
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: |
             8.0.x
@@ -62,23 +66,21 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: nupkg
+          path: ./nupkg
       - name: Get Version
         id: vars
-        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+        run: echo "tag=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
       - name: Create Release
-        uses: actions/create-release@v1
+        uses: softprops/action-gh-release@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ steps.vars.outputs.tag }}
+          name: ${{ steps.vars.outputs.tag }}
           release_name: Release ${{ steps.vars.outputs.tag }}
           draft: false
           prerelease: false
-      - uses: AButler/upload-release-assets@v2.0
-        with:
-          files: 'nupkg/*.nupkg'
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          release-tag: ${{ steps.vars.outputs.tag }}
+          files: |
+            nupkg/*.nupkg
   cleanup:
     needs: release
     runs-on: ubuntu-latest
