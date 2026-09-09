@@ -10,3 +10,4 @@ public abstract record GetHandlerAsync<TRequest>(string Path) : EndpointHandlerA
 public abstract record PatchHandlerAsync<TRequest>(string Path) : EndpointHandlerAsync<TRequest>(Constants.Patch, Path);
 public abstract record PostHandlerAsync<TRequest>(string Path) : EndpointHandlerAsync<TRequest>(Constants.Post, Path);
 public abstract record PutHandlerAsync<TRequest>(string Path) : EndpointHandlerAsync<TRequest>(Constants.Put, Path);
+public abstract record QueryHandlerAsync<TRequest>(string Path) : EndpointHandlerAsync<TRequest>(Constants.Query, Path);
