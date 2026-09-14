@@ -16,6 +16,7 @@ public abstract record Get(string Path) : Endpoint(Constants.Get, Path);
 public abstract record Patch(string Path) : Endpoint(Constants.Patch, Path);
 public abstract record Post(string Path) : Endpoint(Constants.Post, Path);
 public abstract record Put(string Path) : Endpoint(Constants.Put, Path);
+public abstract record Query(string Path) : Endpoint(Constants.Query, Path);
 
 internal static class NamingConventionUtilities
 {

@@ -21,3 +21,4 @@ public abstract record GetHandler(string Path) : EndpointHandler(Constants.Get, 
 public abstract record PatchHandler(string Path) : EndpointHandler(Constants.Patch, Path);
 public abstract record PostHandler(string Path) : EndpointHandler(Constants.Post, Path);
 public abstract record PutHandler(string Path) : EndpointHandler(Constants.Put, Path);
+public abstract record QueryHandler(string Path) : EndpointHandler(Constants.Query, Path);

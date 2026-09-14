@@ -21,3 +21,4 @@ public abstract record GetHandler<TRequest, TResponse>(string Path) : EndpointHa
 public abstract record PatchHandler<TRequest, TResponse>(string Path) : EndpointHandler<TRequest, TResponse>(Constants.Patch, Path);
 public abstract record PostHandler<TRequest, TResponse>(string Path) : EndpointHandler<TRequest, TResponse>(Constants.Post, Path);
 public abstract record PutHandler<TRequest, TResponse>(string Path) : EndpointHandler<TRequest, TResponse>(Constants.Put, Path);
+public abstract record QueryHandler<TRequest, TResponse>(string Path) : EndpointHandler<TRequest, TResponse>(Constants.Query, Path);

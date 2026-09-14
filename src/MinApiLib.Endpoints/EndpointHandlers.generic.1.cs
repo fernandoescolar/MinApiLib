@@ -10,3 +10,4 @@ public abstract record GetHandler<TRequest>(string Path) : EndpointHandler<TRequ
 public abstract record PatchHandler<TRequest>(string Path) : EndpointHandler<TRequest>(Constants.Patch, Path);
 public abstract record PostHandler<TRequest>(string Path) : EndpointHandler<TRequest>(Constants.Post, Path);
 public abstract record PutHandler<TRequest>(string Path) : EndpointHandler<TRequest>(Constants.Put, Path);
+public abstract record QueryHandler<TRequest>(string Path) : EndpointHandler<TRequest>(Constants.Query, Path);

@@ -7,6 +7,7 @@ internal static class Constants
     public const string Put = "PUT";
     public const string Delete = "DELETE";
     public const string Patch = "PATCH";
+    public const string Query = "QUERY";
 
     public static readonly string[] MethodNames = new[] { "Handle", "HandleAsync" };
 }

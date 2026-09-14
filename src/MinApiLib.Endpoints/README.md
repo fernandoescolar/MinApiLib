@@ -79,6 +79,7 @@ If you want to use the naming convention to create endpoints, you can use the fo
 - `Put`
 - `Delete`
 - `Patch`
+- `Query`
 
 This endpoints are based on the `Endpoint` class, which provides the following methods:
 
@@ -155,6 +156,7 @@ For synchronous strong typed handlers, you can use the following records:
 - `PutHandler`, `PutHandler<TRequest>` and `PutHandler<TRequest, TResponse>`
 - `DeleteHandler`, `DeleteHandler<TRequest>` and `DeleteHandler<TRequest, TResponse>`
 - `PatchHandler`, `PatchHandler<TRequest>` and `PatchHandler<TRequest, TResponse>`
+- `QueryHandler`, `QueryHandler<TRequest>` and `QueryHandler<TRequest, TResponse>`
 
 These endpoints are based on the `EndpointHandler` class, which provides the following methods:
 
@@ -225,6 +227,7 @@ For asynchronous strong typed handlers, you can use the following records:
 - `PutHandlerAsync`, `PutHandlerAsync<TRequest>` and `PutHandlerAsync<TRequest, TResponse>`
 - `DeleteHandlerAsync`, `DeleteHandlerAsync<TRequest>` and `DeleteHandlerAsync<TRequest, TResponse>`
 - `PatchHandlerAsync`, `PatchHandlerAsync<TRequest>` and `PatchHandlerAsync<TRequest, TResponse>`
+- `QueryHandlerAsync`, `QueryHandlerAsync<TRequest>` and `QueryHandlerAsync<TRequest, TResponse>`
 
 These endpoints are based on the `EndpointHandlerAsync` class, which provides the following methods:
 
