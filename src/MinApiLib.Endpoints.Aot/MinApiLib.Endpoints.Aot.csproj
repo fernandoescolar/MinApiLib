@@ -1,26 +1,24 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<!-- The release passes IncludeSymbols=true, but an analyzer package has no build output to make a symbol package from. -->
+<Project Sdk="Microsoft.NET.Sdk" TreatAsLocalProperty="IncludeSymbols">
   <PropertyGroup>
+    <IncludeSymbols>false</IncludeSymbols>
+    <TargetFrameworks></TargetFrameworks>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <ImplicitUsings>disable</ImplicitUsings>
     <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
     <LangVersion>11</LangVersion>
-    <OutputType>Library</OutputType>
-    <IsPackable>true</IsPackable>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
     <PackageId>MinApiLib.Endpoints.Aot</PackageId>
     <PackageTags>AspNetCore;api;minimalapi;lib;minapilib;endpoints;aot</PackageTags>
-    <Authors>Fernando Escolar</Authors>
     <Description>EndPoints records source generator for Minimal API with AOT.</Description>
-    <PackageProjectUrl>https://github.com/fernandoescolar/MinApiLib</PackageProjectUrl>
-    <PackageIcon>icon.png</PackageIcon>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="5.0.0" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="4.14.0" PrivateAssets="all" />
+    <!-- 4.8 is the compiler of the .NET 8 SDK: a generator built against a newer one doesn't load there. -->
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.8.0" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4" PrivateAssets="all" />
   </ItemGroup>
   <ItemGroup>
-    <None Include=".\README.md" Pack="true" PackagePath="" />
-    <None Include="..\..\LICENSE" Pack="true" PackagePath="" />
-    <None Include="..\..\icon.png" Pack="true" PackagePath="" />
+    <None Include="$(OutputPath)$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
   </ItemGroup>
 </Project>

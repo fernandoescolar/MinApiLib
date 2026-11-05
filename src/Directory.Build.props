@@ -1,0 +1,18 @@
+<Project>
+  <PropertyGroup>
+    <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>true</IsPackable>
+    <Authors>Fernando Escolar</Authors>
+    <PackageProjectUrl>https://github.com/fernandoescolar/MinApiLib</PackageProjectUrl>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildProjectDirectory)\README.md" Pack="true" PackagePath="" />
+    <None Include="$(MSBuildThisFileDirectory)..\LICENSE" Pack="true" PackagePath="" />
+    <None Include="$(MSBuildThisFileDirectory)..\icon.png" Pack="true" PackagePath="" />
+  </ItemGroup>
+</Project>

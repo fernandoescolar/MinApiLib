@@ -1,24 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
-    <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
-    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
     <OutputType>Library</OutputType>
-    <IsPackable>true</IsPackable>
     <PackageId>MinApiLib.Validation</PackageId>
-    <PackageTags>AspNetCore;api;minimalapi;lib;minapilib;validation</PackageTags>
-    <Authors>Fernando Escolar</Authors>
-    <Description>Data annotations validation filter for Minimal API</Description>
-    <PackageProjectUrl>https://github.com/fernandoescolar/MinApiLib</PackageProjectUrl>
-    <PackageIcon>icon.png</PackageIcon>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageTags>AspNetCore;api;minimalapi;lib;minapilib;validation;deprecated</PackageTags>
+    <Description>Deprecated: use MinApiLib.FluentValidation. Data annotations validation filter for Minimal API.</Description>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="MiniValidation" Version="0.9.2" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include=".\README.md" Pack="true" PackagePath="" />
-    <None Include="..\..\LICENSE" Pack="true" PackagePath="" />
-    <None Include="..\..\icon.png" Pack="true" PackagePath="" />
   </ItemGroup>
 </Project>
