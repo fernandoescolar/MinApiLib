@@ -8,11 +8,11 @@ public static class HashedIdExtensions
         ArgumentNullException.ThrowIfNull(configure);
 
         var options = new HashedIdOptions();
-        configure?.Invoke(options);
+        configure.Invoke(options);
 
         ArgumentNullException.ThrowIfNull(options.Passphrase, nameof(options.Passphrase));
 
-        Hasher.Instance = new Hashids(options.Passphrase);
+        Hasher.Instance = new Hashids(options.Passphrase, options.MinHashLength);
         services.AddSingleton<IHashids>(sp => Hasher.Instance);
 
         return services;

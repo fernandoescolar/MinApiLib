@@ -10,7 +10,7 @@ public record struct HashedId(int Value)
         return encoded;
     }
 
-    public static bool TryParse(string value, out HashedId result)
+    public static bool TryParse(string? value, out HashedId result)
     {
         if (!string.IsNullOrWhiteSpace(value))
         {
