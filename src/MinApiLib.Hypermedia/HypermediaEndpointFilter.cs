@@ -17,31 +17,42 @@ public class HypermediaEndpointFilter : IEndpointFilter
             return result;
         }
 
-        if (result is IStatusCodeHttpResult s
-            && s.StatusCode >= 200
-            && s.StatusCode < 300
-            && result is IValueHttpResult v
-            && v.Value is not null)
+        var value = GetSuccessValue(result);
+        if (value is null)
         {
-            var hypermedia = context.HttpContext.RequestServices.GetService(typeof(HypermediaConverter)) as HypermediaConverter;
-            if (hypermedia is null)
-            {
-                throw new InvalidOperationException("Unable to resolve HypermediaConverter");
-            }
-
-            var hypermediaResponse = hypermedia.Convert(v.Value);
-            HypermediaLinkHelper.FullfillLinkUrls(hypermediaResponse, context.HttpContext);
-
-            return new HypermediaResult(hypermediaResponse, s.StatusCode.Value, _options.ContentType);
+            return result;
         }
 
-        return result;
+        var hypermedia = context.HttpContext.RequestServices.GetService(typeof(HypermediaConverter)) as HypermediaConverter;
+        if (hypermedia is null)
+        {
+            throw new InvalidOperationException("Unable to resolve HypermediaConverter");
+        }
+
+        var hypermediaResponse = hypermedia.Convert(value);
+        if (hypermediaResponse is null)
+        {
+            return result;
+        }
+
+        HypermediaLinkHelper.FullfillLinkUrls(hypermediaResponse, context.HttpContext);
+
+        return new HypermediaResult(hypermediaResponse, result as IResult, _options.ContentType);
     }
+
+    private static object GetSuccessValue(object result)
+        => result switch
+        {
+            IStatusCodeHttpResult { StatusCode: < 200 or >= 300 } => null,
+            IValueHttpResult valueResult => valueResult.Value,
+            IResult => null,
+            _ => result
+        };
 
     private bool IsHypermediaRequest(EndpointFilterInvocationContext context)
         => context.HttpContext
                   .Request
-                  .Headers
+                  .GetTypedHeaders()
                   .Accept
-                  .Any(x => x.StartsWith(_options.ContentType, StringComparison.InvariantCultureIgnoreCase));
+                  .Any(x => x.Quality != 0 && x.MediaType.Equals(_options.ContentType, StringComparison.OrdinalIgnoreCase));
 }

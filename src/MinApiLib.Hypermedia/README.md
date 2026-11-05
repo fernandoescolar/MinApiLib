@@ -54,10 +54,12 @@ public class ResponseHypermediaProvider : HypermediaProvider<Response>
     }
 }
 
-public record GetThing() : GetEndpoint("/things/{id}")
+public record struct Request([FromRoute] int Id);
+
+public record GetThing() : GetHandler<Request>("/things/{id}")
 {
-    public IResult Handle(int id)
-        => Results.Ok(new Response(id, "John Doe"));
+    protected override IResult Handle(Request request)
+        => Results.Ok(new Response(request.Id, "John Doe"));
 }
 ```
 
@@ -67,3 +69,13 @@ You should add "application/vnd.hypermedia+json" as "Accept" header in order to 
 $ curl -H "Accept: application/vnd.hypermedia+json" "http://localhost:5000/things/1"
 {"value":{"id":"Wk","name":"John Doe"},"links":[{"href":"http://localhost:5000/things/Wk","rel":"self","method":"GET"},{"href":"http://localhost:5000/things/Wk","rel":"update","method":"PUT"},{"href":"http://localhost:5000/things/Wk","rel":"delete","method":"DELETE"},{"href":"http://localhost:5000/things","rel":"beers","method":"GET"}]}%
 ```
+
+## Behavior
+
+- The response uses the hypermedia content type only when the `Accept` header lists it. Any other request gets the plain response.
+- Links are added to successful responses with a value, from any handler: `Results.Ok`, `Results.Created`, `Results.Json`, or a typed `TResponse`. Status code and headers such as `Location` are kept.
+- Responses without a value, error responses, and values without a matching provider are returned unchanged.
+- A provider matches with an `is T` check, so use `HypermediaProvider<IEnumerable<Item>>` for lists.
+- Relative links are completed with the request scheme, host and path base. Absolute `http` and `https` links are kept as they are.
+
+In OpenAPI, `ApiExplorer` keeps one declaration per status code and the last one wins. If you call `.ProducesHypermedia<T>(200)` and then `.Produces<T>(200)`, only the plain `T` is documented.

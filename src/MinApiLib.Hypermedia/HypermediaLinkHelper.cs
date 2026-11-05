@@ -6,12 +6,16 @@ public static class HypermediaLinkHelper
     {
         foreach (var link in hypermediaResponse.Links)
         {
-            if (!link.Href.StartsWith("http"))
+            if (!IsAbsolute(link.Href))
             {
                 link.Href = GetUrl(httpContext.Request, link.Href);
             }
         }
     }
+
+    private static bool IsAbsolute(string href)
+        => href.StartsWith("http://", StringComparison.OrdinalIgnoreCase)
+        || href.StartsWith("https://", StringComparison.OrdinalIgnoreCase);
 
     private static string GetUrl(HttpRequest request, string path)
     {
@@ -19,6 +23,12 @@ public static class HypermediaLinkHelper
         url.Append(request.Scheme);
         url.Append("://");
         url.Append(request.Host);
+        url.Append(request.PathBase);
+        if (!path.StartsWith('/'))
+        {
+            url.Append('/');
+        }
+
         url.Append(path);
         return url.ToString();
     }
