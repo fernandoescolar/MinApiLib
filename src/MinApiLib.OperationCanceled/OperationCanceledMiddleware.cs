@@ -20,9 +20,14 @@ public class OperationCanceledMiddleware
         {
             await _next(context);
         }
-        catch(OperationCanceledException)
+        catch (OperationCanceledException) when (context.RequestAborted.IsCancellationRequested)
         {
             _logger.LogInformation("Request was canceled");
+            if (context.Response.HasStarted)
+            {
+                return;
+            }
+
             context.Response.StatusCode = _options.StatusCode;
             await context.Response.WriteAsync("Client Closed Request");
         }
