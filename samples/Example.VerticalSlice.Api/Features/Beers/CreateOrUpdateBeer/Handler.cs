@@ -18,7 +18,7 @@ public record Handler() : PutHandlerAsync<Request>("/beers/{id}")
         var brewery = await req.Database.Breweries.FindAsync(new object[] { (int)req.Body.BreweryId }, cancellationToken);
         if (brewery is null)
         {
-            return Results.BadRequest("Unkown Brewery");
+            return Results.BadRequest("Unknown brewery");
         }
 
         var style = await req.Database.Styles.FindAsync(new object[] { (int)req.Body.StyleId }, cancellationToken);

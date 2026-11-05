@@ -1,10 +1,11 @@
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddBeerDbContext();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c => { c.MapType<HashedId>(() => new OpenApiSchema { Type = "string" }); });
-builder.Services.AddHashedIds(op => op.Passphrase = "my secret passphrase");
+builder.Services.AddSwaggerGen(c => { c.MapType<HashedId>(() => new OpenApiSchema { Type = JsonSchemaType.String }); });
+builder.Services.AddHashedIds(op => op.Passphrase = builder.Configuration["HashedIds:Passphrase"]);
 builder.Services.AddHypermedia();
 builder.Services.AddAssembly();
+builder.Services.AddValidatorsFromAssembly();
 
 var app = builder.Build();
 app.SeedBeerDbData();

@@ -4,15 +4,21 @@ public record GetBeersByBrewery() : Get("/breweries/{id}/beers")
 {
     protected override RouteHandlerBuilder Configure(RouteHandlerBuilder builder)
         => builder
-                .ProducesHypermedia<BeerList>(StatusCodes.Status200OK)
-                .Produces<BeerList>(StatusCodes.Status200OK)
+                .ProducesHypermedia<BreweryBeerList>(StatusCodes.Status200OK)
+                .Produces<BreweryBeerList>(StatusCodes.Status200OK)
                 .Produces(StatusCodes.Status204NoContent)
+                .Produces(StatusCodes.Status400BadRequest)
                 .Produces(StatusCodes.Status404NotFound)
                 .WithName(nameof(GetBeersByBrewery))
                 .WithTags("Beers");
 
     public async Task<IResult> HandleAsync(BeerDbContext db, HashedId id, int page = 1, int pageSize = 10, CancellationToken cancellationToken = default)
     {
+        if (page < 1 || pageSize is < 1 or > 100)
+        {
+            return Results.BadRequest("page must be >= 1 and pageSize between 1 and 100");
+        }
+
         var brewery = await db.Breweries.FindAsync(new object[] { (int)id }, cancellationToken);
         if (brewery is null)
         {
@@ -27,6 +33,9 @@ public record GetBeersByBrewery() : Get("/breweries/{id}/beers")
 
         var beers = await db.Beers
                         .Where(b => b.Brewery.Id == (int)id)
+                        .OrderBy(b => b.Name)
+                        .Skip((page - 1) * pageSize)
+                        .Take(pageSize)
                         .Select(b => new BeerListItem
                         {
                             Id = b.Id,
@@ -36,12 +45,9 @@ public record GetBeersByBrewery() : Get("/breweries/{id}/beers")
                             StyleId = b.Style.Id,
                             StyleName = b.Style.Name,
                         })
-                        .OrderBy(b => b.Name)
-                        .Skip((page - 1) * pageSize)
-                        .Take(pageSize)
                         .ToListAsync(cancellationToken);
 
-        var resourceList = new BeerList(beers, total, page, pageSize);
+        var resourceList = new BreweryBeerList(id, beers, total, page, pageSize);
 
         return Results.Ok(resourceList);
     }

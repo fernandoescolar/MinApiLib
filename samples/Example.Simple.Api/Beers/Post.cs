@@ -6,7 +6,6 @@ public record CreateBeer() : AbstractUpsert("POST", "/beers")
         => builder
                 .ProducesHypermedia<BeerDetail>(StatusCodes.Status201Created)
                 .Produces<BeerDetail>(StatusCodes.Status201Created)
-                .Produces(StatusCodes.Status204NoContent)
                 .Produces(StatusCodes.Status400BadRequest)
                 .WithName(nameof(CreateBeer))
                 .WithTags("Beers")

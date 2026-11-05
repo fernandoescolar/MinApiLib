@@ -8,7 +8,8 @@ public record Handler() : GetHandlerAsync<Request>("/breweries")
                 .Produces<Response>(StatusCodes.Status200OK)
                 .Produces(StatusCodes.Status204NoContent)
                 .WithName("GetBreweries")
-                .WithTags("Breweries");
+                .WithTags("Breweries")
+                .WithValidation();
 
     protected override async Task<IResult> HandleAsync(Request req, CancellationToken cancellationToken = default)
     {
@@ -22,6 +23,9 @@ public record Handler() : GetHandlerAsync<Request>("/breweries")
 
         var breweries = await req.Database
                                     .Breweries
+                                    .OrderBy(b => b.Name)
+                                    .Skip((req.Page - 1) * req.PageSize)
+                                    .Take(req.PageSize)
                                     .Select(b => new ResponseItem
                                         {
                                             Id = b.Id,
@@ -29,9 +33,6 @@ public record Handler() : GetHandlerAsync<Request>("/breweries")
                                             City = b.City,
                                             Country = b.Country,
                                         })
-                                    .OrderBy(b => b.Name)
-                                    .Skip((req.Page - 1) * req.PageSize)
-                                    .Take(req.PageSize)
                                     .ToListAsync(cancellationToken);
 
         var resourceList = new Response(breweries, total, req.Page, req.PageSize);

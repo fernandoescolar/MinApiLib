@@ -6,7 +6,6 @@ public record Handler() : PostHandlerAsync<Request>("/beers")
         => builder
                 .ProducesHypermedia<Response>(StatusCodes.Status201Created)
                 .Produces<Response>(StatusCodes.Status201Created)
-                .Produces(StatusCodes.Status204NoContent)
                 .Produces(StatusCodes.Status400BadRequest)
                 .WithName("CreateBeer")
                 .WithTags("Beers")
@@ -19,7 +18,7 @@ public record Handler() : PostHandlerAsync<Request>("/beers")
         var brewery = await req.Database.Breweries.FindAsync(new object[] { (int)req.Body.BreweryId }, cancellationToken);
         if (brewery is null)
         {
-            return Results.BadRequest("Unkown Brewery");
+            return Results.BadRequest("Unknown brewery");
         }
 
         var style = await req.Database.Styles.FindAsync(new object[] { (int)req.Body.StyleId }, cancellationToken);

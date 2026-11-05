@@ -9,7 +9,7 @@ public abstract record AbstractUpsert(string Verb, string Path) : Endpoint(Verb,
         var brewery = await db.Breweries.FindAsync(new object[] { (int)input.BreweryId }, cancellationToken);
         if (brewery is null)
         {
-            return Results.BadRequest("Unkown Brewery");
+            return Results.BadRequest("Unknown brewery");
         }
 
         var style = await db.Styles.FindAsync(new object[] { (int)input.StyleId }, cancellationToken);

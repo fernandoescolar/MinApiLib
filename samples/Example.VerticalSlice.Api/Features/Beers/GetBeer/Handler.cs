@@ -10,14 +10,14 @@ public record Handler() : GetHandlerAsync<Request>("/beers/{id}")
                 .WithName("GetBeer")
                 .WithTags("Beers");
 
-    protected override async Task<IResult> HandleAsync(Request query, CancellationToken cancellationToken)
+    protected override async Task<IResult> HandleAsync(Request req, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        var beer = await query.Database.Beers
-                                       .Include(nameof(Beer.Brewery))
-                                       .Include(nameof(Beer.Style))
-                                       .FirstOrDefaultAsync(b => b.Id == (int)query.Id, cancellationToken);
+        var beer = await req.Database.Beers
+                                     .Include(nameof(Beer.Brewery))
+                                     .Include(nameof(Beer.Style))
+                                     .FirstOrDefaultAsync(b => b.Id == (int)req.Id, cancellationToken);
 
         if (beer is null)
         {

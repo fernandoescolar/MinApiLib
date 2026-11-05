@@ -2,12 +2,17 @@ namespace Example.Simple.Api.Beers.Models;
 
 public class BeerRequest
 {
-    [Required, StringLength(100, MinimumLength = 3)]
     public string Name { get; set; }
 
-    [Required]
-    public HashedId BreweryId { get; set; }
+    public required HashedId BreweryId { get; set; }
 
-    [Required]
-    public HashedId StyleId { get; set; }
+    public required HashedId StyleId { get; set; }
+}
+
+public class BeerRequestValidator : AbstractValidator<BeerRequest>
+{
+    public BeerRequestValidator()
+    {
+        RuleFor(x => x.Name).NotEmpty().Length(3, 100);
+    }
 }

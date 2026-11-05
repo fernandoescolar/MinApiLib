@@ -27,6 +27,6 @@ public class ResponseHypermediaProvider : HypermediaProvider<Response>
         yield return new HypermediaLink("self", "/breweries/" + @object.Id, "GET");
         yield return new HypermediaLink("update", "/breweries/" + @object.Id, "PUT");
         yield return new HypermediaLink("delete", "/breweries/" + @object.Id, "DELETE");
-        yield return new HypermediaLink("beers", "/breweries", "GET");
+        yield return new HypermediaLink("breweries", "/breweries", "GET");
     }
 }

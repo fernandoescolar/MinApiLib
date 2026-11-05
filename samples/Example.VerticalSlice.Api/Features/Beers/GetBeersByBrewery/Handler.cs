@@ -7,8 +7,10 @@ public record Handler() : GetHandlerAsync<Request>("/breweries/{id}/beers")
                 .ProducesHypermedia<Response>(StatusCodes.Status200OK)
                 .Produces<Response>(StatusCodes.Status200OK)
                 .Produces(StatusCodes.Status204NoContent)
+                .Produces(StatusCodes.Status404NotFound)
                 .WithName("GetBeersByBrewery")
-                .WithTags("Beers");
+                .WithTags("Beers")
+                .WithValidation();
 
     protected override async Task<IResult> HandleAsync(Request req, CancellationToken cancellationToken)
     {
@@ -29,6 +31,9 @@ public record Handler() : GetHandlerAsync<Request>("/breweries/{id}/beers")
         var beers = await req.Database
                                 .Beers
                                 .Where(b => b.Brewery.Id == (int)req.BreweryId)
+                                .OrderBy(b => b.Name)
+                                .Skip((req.Page - 1) * req.PageSize)
+                                .Take(req.PageSize)
                                 .Select(b => new ResponseItem
                                 {
                                     Id = b.Id,
@@ -38,12 +43,9 @@ public record Handler() : GetHandlerAsync<Request>("/breweries/{id}/beers")
                                     StyleId = b.Style.Id,
                                     StyleName = b.Style.Name,
                                 })
-                                .OrderBy(b => b.Name)
-                                .Skip((req.Page - 1) * req.PageSize)
-                                .Take(req.PageSize)
                                 .ToListAsync(cancellationToken);
 
-        var resourceList = new Response(beers, total, req.Page, req.PageSize);
+        var resourceList = new Response(beers, total, req.Page, req.PageSize) { BreweryId = req.BreweryId };
 
         return Results.Ok(resourceList);
     }

@@ -7,12 +7,17 @@ public record struct Request(
 
 public class RequestBody
 {
-    [Required, StringLength(100, MinimumLength = 3)]
     public string Name { get; set; }
 
-    [Required]
-    public HashedId BreweryId { get; set; }
+    public required HashedId BreweryId { get; set; }
 
-    [Required]
-    public HashedId StyleId { get; set; }
+    public required HashedId StyleId { get; set; }
+}
+
+public class RequestValidator : AbstractValidator<Request>
+{
+    public RequestValidator()
+    {
+        RuleFor(x => x.Body.Name).NotEmpty().Length(3, 100);
+    }
 }

@@ -8,12 +8,19 @@ public record struct Request(
 
 public class RequestBody
 {
-    [Required, StringLength(150, MinimumLength = 3)]
     public string Name { get; set; }
 
-    [Required]
     public string City { get; set; }
 
-    [Required]
     public string Country { get; set; }
+}
+
+public class RequestValidator : AbstractValidator<Request>
+{
+    public RequestValidator()
+    {
+        RuleFor(x => x.Body.Name).NotEmpty().Length(3, 150);
+        RuleFor(x => x.Body.City).NotEmpty();
+        RuleFor(x => x.Body.Country).NotEmpty();
+    }
 }
