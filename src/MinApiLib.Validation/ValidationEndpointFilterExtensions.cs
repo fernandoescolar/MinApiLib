@@ -1,5 +1,6 @@
 namespace MinApiLib.Validation;
 
+[Obsolete("MinApiLib.Validation is deprecated. Use MinApiLib.FluentValidation instead.")]
 public static class ValidationEndpointFilterExtensions
 {
     public static RouteHandlerBuilder WithValidation(this RouteHandlerBuilder builder)

@@ -16,7 +16,7 @@ public record Hello02() : GetHandler("/hello02")
         => builder
                 .Produces(StatusCodes.Status200OK)
                 .Produces(StatusCodes.Status204NoContent)
-                .WithName("Hello")
+                .WithName("Hello02")
                 .WithTags("hello", "world");
 
     protected override IResult Handle()
@@ -55,12 +55,12 @@ public record Hello06() : GetHandlerAsync("/hello06")
         => builder
                 .Produces(StatusCodes.Status200OK)
                 .Produces(StatusCodes.Status204NoContent)
-                .WithName("Hello")
+                .WithName("Hello06")
                 .WithTags("hello", "world");
 
     protected override async Task<IResult> HandleAsync(CancellationToken cancellationToken)
     {
-        await Task.Delay(1000);
+        await Task.Delay(1, cancellationToken);
         return Results.Ok("Hello World!");
     }
 }
@@ -71,7 +71,7 @@ public record Hello07() : GetHandlerAsync<Request07>("/hello07/{name}")
 {
     protected override async Task<IResult> HandleAsync(Request07 request, CancellationToken cancellationToken)
     {
-        await Task.Delay(1000);
+        await Task.Delay(1, cancellationToken);
         return Results.Ok($"Hello {request.Name}!");
     }
 }
@@ -82,7 +82,7 @@ public record Hello08() : GetHandlerAsync<Request08>("/hello08/{name}")
 {
     protected override async Task<IResult> HandleAsync(Request08 request, CancellationToken cancellationToken)
     {
-        await Task.Delay(1000);
+        await Task.Delay(1, cancellationToken);
         return Results.Ok($"Hello {request.Name}!");
     }
 }
@@ -95,45 +95,76 @@ public record Hello09() : GetHandlerAsync<Request09, Response09>("/hello09/{name
 {
     protected override async Task<Response09> HandleAsync(Request09 request, CancellationToken cancellationToken)
     {
-        await Task.Delay(1000);
+        await Task.Delay(1, cancellationToken);
         return new Response09($"Hello {request.Name}!");
     }
 }
 
-public record Hello10(): Get("/hello10")
+public record Hello10() : Get("/hello10")
 {
     public IResult Handle()
         => Results.Ok("Hello World!");
 }
 
-public record Hello11(): Get("/hello11")
+public record Hello11() : Get("/hello11")
 {
     public Task<IResult> HandleAsync()
         => Task.FromResult(Results.Ok("Hello World!"));
 }
 
-public record Hello12(): Get("/hello12/{name}")
+public record Hello12() : Get("/hello12/{name}")
 {
     public IResult Handle(string name)
         => Results.Ok($"Hello {name}!");
 }
 
-public record Hello13(): Get("/hello13/{name}")
+public record Hello13() : Get("/hello13/{name}")
 {
     public IResult Handle([FromRoute] string name)
         => Results.Ok($"Hello {name}!");
 }
 
-public record Hello14(): Get("/hello14")
+public record Hello14() : Get("/hello14")
 {
-    public IResult Handle([FromQuery] string name, [FromHeader] string userAgent, [FromServices] CancellationToken cancellationToken)
+    public IResult Handle([FromQuery] string name, [FromHeader(Name = "User-Agent")] string userAgent, CancellationToken cancellationToken)
         => Results.Ok($"Hello {name}! Your user agent is {userAgent}.");
 }
 
 public record struct Response15(string Message);
 
-public record Hello15(): Get("/hello15/{name}")
+public record Hello15() : Get("/hello15/{name}")
 {
     public Response15 Handle(string name)
         => new Response15($"Hello {name}!");
+}
+
+public record HelloStatic() : Get("/hello-static")
+{
+    public static IResult Handle()
+        => Results.Ok("Hello World!");
+}
+
+public record HelloVerbs() : EndpointHandler(new[] { "GET", "POST" }, "/hello-verbs")
+{
+    protected override IResult Handle()
+        => Results.Ok("Hello World!");
+}
+
+public record struct QueryRequest([FromBody] QueryBody Body);
+
+public record QueryBody(string Term);
+
+public record HelloQuery() : QueryHandler<QueryRequest>("/hello-query")
+{
+    protected override IResult Handle(QueryRequest request)
+        => Results.Ok($"Searching {request.Body.Term}");
+}
+
+// MapEndpoints must skip the types it can't create.
+public abstract record AbstractHello() : GetHandler("/never-abstract");
+
+public record OpenGenericHello<T>() : GetHandler("/never-generic")
+{
+    protected override IResult Handle()
+        => Results.Ok(typeof(T).Name);
 }

@@ -1,5 +1,6 @@
 ﻿namespace MinApiLib.Validation;
 
+[Obsolete("MinApiLib.Validation is deprecated. Use MinApiLib.FluentValidation instead.")]
 public class ValidationEndpointFilter : IEndpointFilter
 {
     public ValueTask<object> InvokeAsync(EndpointFilterInvocationContext context, EndpointFilterDelegate next)

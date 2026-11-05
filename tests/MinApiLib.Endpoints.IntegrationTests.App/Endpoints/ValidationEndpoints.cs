@@ -1,6 +1,5 @@
-using System.ComponentModel.DataAnnotations;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using MinApiLib.Validation;
 
 namespace MinApiLib.Endpoints.IntegrationTests.App.Endpoints.Things3;
 
@@ -10,29 +9,34 @@ public record struct Request(
 
 public class RequestBody
 {
-    [Required, StringLength(150, MinimumLength = 3)]
     public string Name { get; set; }
 
-    [Required]
     public string City { get; set; }
 
-    [Required]
     public string Country { get; set; }
+}
+
+public class RequestValidator : AbstractValidator<Request>
+{
+    public RequestValidator()
+    {
+        RuleFor(x => x.Body.Name).NotEmpty().Length(3, 150);
+        RuleFor(x => x.Body.City).NotEmpty();
+        RuleFor(x => x.Body.Country).NotEmpty();
+    }
 }
 
 public record CreateThing() : PostHandlerAsync<Request>("things")
 {
     protected override RouteHandlerBuilder Configure(RouteHandlerBuilder builder)
         => builder
-                .Produces<Response>(StatusCodes.Status201Created)
-                .Produces(StatusCodes.Status400BadRequest)
+                .Produces<RequestBody>(StatusCodes.Status201Created)
                 .WithName("CreateThings")
                 .WithTags("things")
                 .WithValidation();
 
     protected override Task<IResult> HandleAsync(Request request, CancellationToken cancellationToken)
     {
-        // async stuff
-        return Task.FromResult(Results.Created($"/things/{1}", request));
+        return Task.FromResult(Results.Created($"/things/{1}", request.Body));
     }
 }

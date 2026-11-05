@@ -3,70 +3,58 @@
 
 # MinApiLib.Validation
 
-This package contains extensions to use data annotations in your endpoints. It uses the [MiniValidation](https://github.com/DamianEdwards/MiniValidation) library.
+> **Deprecated.** Use [MinApiLib.FluentValidation](../MinApiLib.FluentValidation/README.md) instead. This package no longer receives fixes, and its types are marked `[Obsolete]`.
 
+## Known problems
 
-## Installation
+The filter validates data annotations only on a request member named `Body`. It skips validation without any error if the member has another name, or if the body is received directly as a handler parameter. It doesn't check query, route or header values.
 
-You can install this package using the NuGet package manager:
+## Migrating
 
-```bash
-Install-Package MinApiLib.Validation
-```
-
-Or using the .NET CLI:
+Replace the package:
 
 ```bash
-dotnet add package MinApiLib.Validation
+dotnet remove package MinApiLib.Validation
+dotnet add package MinApiLib.FluentValidation
 ```
 
-## Usage
-
-To use the validation, you can use the `WithValidation` extension method:
+Update the usings, and register the validators:
 
 ```csharp
-global using MinApiLib.Validation;
+// global using MinApiLib.Validation;
+global using FluentValidation;
+global using MinApiLib.FluentValidation;
+// ...
+builder.Services.AddValidatorsFromAssembly();
 ```
 
-Now configure the validation filter in your endpoint:
+Move each annotation to a validator for the request. `WithValidation()` stays the same in the endpoint.
 
 ```csharp
-public record struct Request(
-    [FromBody] RequestBody Body
-);
+// Before
+public record struct Request([FromBody] RequestBody Body);
 
 public class RequestBody
 {
     [Required, StringLength(150, MinimumLength = 3)]
     public string Name { get; set; }
-
-    [Required]
-    public string City { get; set; }
-
-    [Required]
-    public string Country { get; set; }
 }
 
-public record CreateThing() : PostEndpoint<Request>("things")
-{
-    protected override RouteHandlerBuilder Configure(RouteHandlerBuilder builder)
-        => builder
-                .Produces<Response>(StatusCodes.Status201Created)
-                .WithName("CreateThings")
-                .WithTags("things")
-                .WithValidation(); // invokes .ProducesValidationError()
+// After
+public record struct Request([FromBody] RequestBody Body);
 
-    protected override async Task<IResult> OnHandleAsync(Request request, CancellationToken cancellationToken)
+public class RequestBody
+{
+    public string Name { get; set; }
+}
+
+public class RequestValidator : AbstractValidator<Request>
+{
+    public RequestValidator()
     {
-        // async stuff
-        return Results.Created($"/things/{created.Id}", created);
+        RuleFor(x => x.Body.Name).NotEmpty().Length(3, 150);
     }
 }
 ```
 
-It will validate the request body and return a 400 status code response if the validation fails:
-
-```bash
-$ curl -X POST -H "Content-Type: application/json" -d '{"name":"John Doe"}' "http://localhost:5000/things"
-{"City":["The City field is required."],"Country":["The Country field is required."]}%
-```
+The `400` response keeps the same shape, with the errors per property, but the keys include the path of the property, such as `Body.Name`. An endpoint that calls `WithValidation()` needs a validator: without one, its requests aren't validated, and a warning is logged.
