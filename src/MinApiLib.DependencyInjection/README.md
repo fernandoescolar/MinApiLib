@@ -3,17 +3,9 @@
 
 # MinApiLib.DependencyInjection
 
-This package contains extensions to register services in the DI container using Attributes.
+Register services in the DI container with an attribute.
 
 ## Installation
-
-You can install this package using the NuGet package manager:
-
-```bash
-Install-Package MinApiLib.DependencyInjection
-```
-
-Or using the .NET CLI:
 
 ```bash
 dotnet add package MinApiLib.DependencyInjection
@@ -21,34 +13,42 @@ dotnet add package MinApiLib.DependencyInjection
 
 ## Usage
 
-To register a service, you can use the `RegisterInIServiceCollection` attribute:
+Register every decorated class of the calling assembly:
 
 ```csharp
-[RegisterInIServiceCollection]
-public class UserService : IUserService
-{
-    public string GetUserName() => "John Doe";
-}
-```
-
-By default, the service is registered as transient and for the same type of the service, but you can change this behavior by adding the `Type` and / or the `ServiceLifetime` parameters:
-
-```csharp
-[RegisterInIServiceCollection(typeof(IUserService), ServiceLifetime.Scoped)] )]
-public class UserService : IUserService
-{
-    public string GetUserName() => "John Doe";
-}
-```
-
-To register all services in the assembly, you can use the `AddAssembly` method:
-
-```csharp
+global using MinApiLib.DependencyInjection;
+// ...
 builder.Services.AddAssembly();
+// or, when they are in another assembly
+builder.Services.AddAssembly(typeof(UserService).Assembly);
 ```
 
-By default, it wil register the classes in the current executing assembly, but you can change this behavior by adding the `Assembly` parameter:
+And decorate the services:
 
 ```csharp
-builder.Services.AddAssembly(typeof(SomeObject).Assembly);
+[RegisterInIServiceCollection(typeof(IUserService), ServiceLifetime.Scoped)]
+public class UserService : IUserService
+{
+    public string GetUserName() => "John Doe";
+}
 ```
+
+## Attribute forms
+
+The default lifetime is `Transient`.
+
+| Attribute | Registered as |
+|---|---|
+| `[RegisterInIServiceCollection]` | The class itself |
+| `[RegisterInIServiceCollection(ServiceLifetime = ServiceLifetime.Scoped)]` | The class itself, with that lifetime |
+| `[RegisterInIServiceCollection(typeof(IUserService))]` | The interface only; the class itself can't be resolved |
+| `[RegisterInIServiceCollection(typeof(IUserService), ServiceLifetime.Scoped)]` | The interface only, with that lifetime |
+| `[RegisterInIServiceCollection(typeof(IOne), typeof(ITwo), ServiceLifetime = ServiceLifetime.Singleton)]` | The class with that lifetime, and each interface forwarding to it |
+
+With several types, each interface resolves the class registration, so a singleton is the same instance through all of them.
+
+## Behavior
+
+- Abstract classes and interfaces are ignored.
+- Registrations are added, not replaced. If you add a service twice, the container resolves the last one.
+- `AddAssembly` uses reflection, so it isn't suitable for native AOT.

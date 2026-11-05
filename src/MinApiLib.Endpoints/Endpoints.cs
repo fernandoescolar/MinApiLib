@@ -22,13 +22,18 @@ internal static class NamingConventionUtilities
 {
     public static RouteHandlerBuilder MapNamingConventionEndpoint(this IEndpointRouteBuilder builder, Endpoint endpoint)
     {
-        var delegateMethod = endpoint.GetType().GetMethods().Where(m => Constants.MethodNames.Contains(m.Name)).FirstOrDefault();
-        if (delegateMethod == null)
+        var methods = endpoint.GetType().GetMethods().Where(m => Constants.MethodNames.Contains(m.Name)).ToArray();
+        if (methods.Length == 0)
         {
-            throw new Exception($"Endpoint {endpoint.GetType().FullName} does not have a Handle or HandleAsync method.");
+            throw new InvalidOperationException($"Endpoint {endpoint.GetType().FullName} does not have a public Handle or HandleAsync method.");
         }
 
-        var @delegate = CreateHandlerDelegate(endpoint, delegateMethod);
+        if (methods.Length > 1)
+        {
+            throw new InvalidOperationException($"Endpoint {endpoint.GetType().FullName} has {methods.Length} Handle or HandleAsync methods, and it must have only one.");
+        }
+
+        var @delegate = CreateHandlerDelegate(endpoint, methods[0]);
         return builder.MapMethods(endpoint.Path, endpoint.Verbs, @delegate);
     }
 
@@ -52,6 +57,6 @@ internal static class NamingConventionUtilities
             return Delegate.CreateDelegate(getType(types.ToArray()), methodInfo);
         }
 
-        return Delegate.CreateDelegate(getType(types.ToArray()), target, methodInfo.Name);
+        return Delegate.CreateDelegate(getType(types.ToArray()), target, methodInfo);
     }
 }

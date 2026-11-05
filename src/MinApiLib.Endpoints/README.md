@@ -3,29 +3,17 @@
 
 # MinApiLib.Endpoints
 
-This package provides extensions that enable creating endpoints using records and one file per endpoint.
+Define Minimal API endpoints as records, one per endpoint, and map them by scanning an assembly.
 
-Table of conents:
-- [MinApiLib.Endpoints](#minapilibendpoints)
-  - [Installation](#installation)
-  - [Usage](#usage)
-  - [Endpoints](#endpoints)
-    - [Naming convention endpoints](#naming-convention-endpoints)
-    - [Synchronous handlers](#synchronous-handlers)
-    - [Asynchronous handlers](#asynchronous-handlers)
-
+- [Installation](#installation)
+- [Usage](#usage)
+- [Choosing a base record](#choosing-a-base-record)
+- [Handlers](#handlers)
+- [Naming convention endpoints](#naming-convention-endpoints)
+- [Mapping](#mapping)
+- [The QUERY verb](#the-query-verb)
 
 ## Installation
-
-You can install this package using either the NuGet package manager or the .NET CLI:
-
-Using the NuGet package manager:
-
-```bash
-Install-Package MinApiLib.Endpoints
-```
-
-Using the .NET CLI:
 
 ```bash
 dotnet add package MinApiLib.Endpoints
@@ -33,7 +21,7 @@ dotnet add package MinApiLib.Endpoints
 
 ## Usage
 
-To create endpoints, you can use the MapEndpoints extension method to map all endpoints in the assembly.
+Map every endpoint in the assembly:
 
 ```csharp
 global using MinApiLib.Endpoints;
@@ -45,258 +33,127 @@ app.MapEndpoints();
 app.Run();
 ```
 
-By default, the method maps the classes in the current executing assembly, but you can change this behavior by adding the Assembly parameter.:
-
-```csharp
-app.MapEndpoints(typeof(SomeObject).Assembly);
-```
-
-Then, you can create endpoints:
-
-```csharp
-public record Hello() : Get("/hello")
-{
-    public IResult Handle()
-        => Results.Ok("Hello World!");
-}
-```
-
-And test it with curl:
-
-```bash
-$ curl "http://localhost:5000/hello"
-"Hello World!"%
-```
-
-## Endpoints
-
-### Naming convention endpoints
-
-If you want to use the naming convention to create endpoints, you can use the following records:
-
-- `Get`
-- `Post`
-- `Put`
-- `Delete`
-- `Patch`
-- `Query`
-
-This endpoints are based on the `Endpoint` class, which provides the following methods:
-
-- `Configure`: this virtual method is called when the endpoint is configured. You can override it to add your custom configuration.
-
-These endpoints will look for a method named `Handle` or `HandleAsync` in the record to use it as the endpoint handler.
-
-```csharp
-public record Hello(): Get("/hello")
-{
-    public IResult Handle()
-        => Results.Ok("Hello World!");
-}
-```
-
-or:
-
-```csharp
-public record Hello(): Get("/hello")
-{
-    public Task<IResult> HandleAsync()
-        => Task.FromResult(Results.Ok("Hello World!"));
-}
-```
-
-You can specify the parameters and bind them in the same way you do in the minimal API mapping methods:
-
-```csharp
-public record Hello(): Get("/hello/{name}")
-{
-    public IResult Handle(string name)
-        => Results.Ok($"Hello {name}!");
-}
-```
-
-This is the same as:
-
-```csharp
-public record Hello(): Get("/hello/{name}")
-{
-    public IResult Handle([FromRoute] string name)
-        => Results.Ok($"Hello {name}!");
-}
-```
-
-You can use all attribute decorators to specify the `Handle` method parameters:
-
-```csharp
-public record Hello(): Get("/hello")
-{
-    public IResult Handle([FromQuery] string name, [FromHeader] string userAgent, [FromServices] CancellationToken cancellationToken)
-        => Results.Ok($"Hello {name}! Your user agent is {userAgent}.");
-}
-```
-
-And you can also specify the response type:
-
-```csharp
-public record struct Response(string Message);
-
-public record Hello(): Get("/hello/{name}")
-{
-    public Response Handle(string name)
-        => new Response($"Hello {name}!");
-}
-```
-
-### Synchronous handlers
-
-For synchronous strong typed handlers, you can use the following records:
-
-- `GetHandler`, `GetHandler<TRequest>` and `GetHandler<TRequest, TResponse>`
-- `PostHandler`, `PostHandler<TRequest>` and `PostHandler<TRequest, TResponse>`
-- `PutHandler`, `PutHandler<TRequest>` and `PutHandler<TRequest, TResponse>`
-- `DeleteHandler`, `DeleteHandler<TRequest>` and `DeleteHandler<TRequest, TResponse>`
-- `PatchHandler`, `PatchHandler<TRequest>` and `PatchHandler<TRequest, TResponse>`
-- `QueryHandler`, `QueryHandler<TRequest>` and `QueryHandler<TRequest, TResponse>`
-
-These endpoints are based on the `EndpointHandler` class, which provides the following methods:
-
-- `Configure`: this virtual method is called when the endpoint is configured. You can override it to add your custom configuration.
-- `Handle`: this abstract method is called when the endpoint is invoked. You must override it to implement your custom logic.
+Then create endpoints:
 
 ```csharp
 public record Hello() : GetHandler("/hello")
 {
-    protected override RouteHandlerBuilder Configure(RouteHandlerBuilder builder)
-        => builder
-                .Produces(StatusCodes.Status200OK)
-                .Produces(StatusCodes.Status204NoContent)
-                .WithName("Hello")
-                .WithTags("hello", "world");
-
     protected override IResult Handle()
         => Results.Ok("Hello World!");
 }
 ```
 
-If you specify the `TRequest` generic type, the endpoint will automatically bind the request to the specified type using `AsParametersAttribute`.
-
-```csharp
-public record struct Request(string Name);
-
-public record Hello() : GetHandler<Request>("/hello/{name}")
-{
-    protected override IResult Handle(Request request)
-        => Results.Ok($"Hello {request.Name}!");
-}
+```bash
+$ curl "http://localhost:5000/hello"
+"Hello World!"
 ```
 
-This is the same as:
+## Choosing a base record
+
+There is one base record per verb: `Get`, `Post`, `Put`, `Delete`, `Patch` and `Query`.
+
+| Family | Example | Implement |
+|---|---|---|
+| Asynchronous handler | `GetHandlerAsync`, `GetHandlerAsync<TRequest>`, `GetHandlerAsync<TRequest, TResponse>` | `HandleAsync`, checked by the compiler |
+| Synchronous handler | `GetHandler`, `GetHandler<TRequest>`, `GetHandler<TRequest, TResponse>` | `Handle`, checked by the compiler |
+| Naming convention | `Get` | A public `Handle` or `HandleAsync`, found by reflection at startup |
+
+Prefer the handler families. `TRequest` groups the inputs in one type. Without `TResponse` the handler returns `IResult`, so it can answer with any status code; with it, the handler can only answer 200.
+
+## Handlers
 
 ```csharp
 public record struct Request([FromRoute] string Name);
-
-public record Hello() : GetHandler<Request>("/hello/{name}")
-{
-    protected override IResult Handle(Request request)
-        => Results.Ok($"Hello {request.Name}!");
-}
-```
-
-In the `Request` record you can specify the parameter name using the `FromRouteAttribute`, `FromQueryAttribute`, `FromHeaderAttribute`, `FromBodyAttribute` or `FromServicesAttribute` attributes.
-
-And if you specify the `TResponse` generic type, the endpoint will automatically return the response to the specified type.
-
-```csharp
-public record struct Request(string Name);
-
 public record struct Response(string Message);
 
-public record Hello() : GetHandler<Request, Response>("/hello/{name}")
-{
-    protected override Response Handle(Request request)
-        => new Response($"Hello {request.Name}!");
-}
-```
-
-### Asynchronous handlers
-
-For asynchronous strong typed handlers, you can use the following records:
-
-- `GetHandlerAsync`, `GetHandlerAsync<TRequest>` and `GetHandlerAsync<TRequest, TResponse>`
-- `PostHandlerAsync`, `PostHandlerAsync<TRequest>` and `PostHandlerAsync<TRequest, TResponse>`
-- `PutHandlerAsync`, `PutHandlerAsync<TRequest>` and `PutHandlerAsync<TRequest, TResponse>`
-- `DeleteHandlerAsync`, `DeleteHandlerAsync<TRequest>` and `DeleteHandlerAsync<TRequest, TResponse>`
-- `PatchHandlerAsync`, `PatchHandlerAsync<TRequest>` and `PatchHandlerAsync<TRequest, TResponse>`
-- `QueryHandlerAsync`, `QueryHandlerAsync<TRequest>` and `QueryHandlerAsync<TRequest, TResponse>`
-
-These endpoints are based on the `EndpointHandlerAsync` class, which provides the following methods:
-
-- `Configure`: this virtual method is called when the endpoint is configured. You can override it to add your custom configuration.
-- `HandleAsync`: this abstract method is called when the endpoint is invoked. You must override it to implement your custom logic.
-
-```csharp
-public record Hello() : GetHandlerAsync("/hello")
+public record Hello() : GetHandlerAsync<Request>("/hello/{name}")
 {
     protected override RouteHandlerBuilder Configure(RouteHandlerBuilder builder)
         => builder
-                .Produces(StatusCodes.Status200OK)
-                .Produces(StatusCodes.Status204NoContent)
+                .Produces<Response>(StatusCodes.Status200OK)
                 .WithName("Hello")
-                .WithTags("hello", "world");
+                .WithTags("Greetings");
 
-    protected override async Task<IResult> HandleAsync(CancellationToken cancellationToken)
-    {
-        await Task.Delay(1000);
-        return Results.Ok("Hello World!");
-    }
-}
-```
-
-If you specify the `TRequest` generic type, the endpoint will automatically bind the request to the specified type using `AsParametersAttribute`.
-
-```csharp
-public record struct Request(string Name);
-
-public record Hello() : GetHandlerAsync<Request>("/hello/{name}")
-{
     protected override async Task<IResult> HandleAsync(Request request, CancellationToken cancellationToken)
     {
-        await Task.Delay(1000);
-        return Results.Ok($"Hello {request.Name}!");
+        await Task.Delay(10, cancellationToken);
+        return Results.Ok(new Response($"Hello {request.Name}!"));
     }
 }
 ```
 
-This is the same as:
+- `Configure` is optional. It receives the `RouteHandlerBuilder` to add metadata and filters.
+- `TRequest` is bound with `[AsParameters]`. Its members accept the usual attributes: `[FromRoute]`, `[FromQuery]`, `[FromHeader]`, `[FromBody]` and `[FromServices]`.
+- `HandleAsync` always receives the request's `CancellationToken`.
+
+With `TResponse`, return the value directly:
 
 ```csharp
-public record struct Request([FromRoute] string Name);
-
-public record Hello() : GetHandlerAsync<Request>("/hello/{name}")
-{
-    protected override async Task<IResult> HandleAsync(Request request, CancellationToken cancellationToken)
-    {
-        await Task.Delay(1000);
-        return Results.Ok($"Hello {request.Name}!");
-    }
-}
-```
-
-In the `Request` record you can specify the parameter name using the `FromRouteAttribute`, `FromQueryAttribute`, `FromHeaderAttribute`, `FromBodyAttribute` or `FromServicesAttribute` attributes.
-
-And if you specify the `TResponse` generic type, the endpoint will automatically return the response to the specified type.
-
-```csharp
-public record struct Request(string Name);
-
-public record struct Response(string Message);
-
 public record Hello() : GetHandlerAsync<Request, Response>("/hello/{name}")
 {
-    protected override async Task<Response> HandleAsync(Request request, CancellationToken cancellationToken)
-    {
-        await Task.Delay(1000);
-        return new Response($"Hello {request.Name}!");
-    }
+    protected override Task<Response> HandleAsync(Request request, CancellationToken cancellationToken)
+        => Task.FromResult(new Response($"Hello {request.Name}!"));
 }
+```
+
+To answer several verbs, derive from `EndpointHandler`, `EndpointHandler<TRequest>` or their `Async` versions, and pass an array:
+
+```csharp
+public record Hello() : EndpointHandler(new[] { "GET", "POST" }, "/hello")
+{
+    protected override IResult Handle()
+        => Results.Ok("Hello World!");
+}
+```
+
+## Naming convention endpoints
+
+These records look for a public method named `Handle` or `HandleAsync`. It binds its parameters like a Minimal API delegate, and can return anything a delegate can:
+
+```csharp
+public record Hello() : Get("/hello/{name}")
+{
+    public IResult Handle(string name, [FromHeader(Name = "User-Agent")] string userAgent, CancellationToken cancellationToken)
+        => Results.Ok($"Hello {name}! Your user agent is {userAgent}.");
+}
+```
+
+Declare exactly one such method per record: with none, or with overloads, mapping the endpoint throws an `InvalidOperationException` that names the record. Override `Configure` to add metadata, as in the handlers.
+
+## Mapping
+
+`MapEndpoints()` maps every class implementing `IEndpoint` in the calling assembly, skipping abstract classes and open generics, inside a group for the root path. It returns that `RouteGroupBuilder`, so you can apply filters to all the endpoints:
+
+```csharp
+app.MapEndpoints()
+   .WithHypermedia();
+```
+
+If the endpoints are in another assembly, or `MapEndpoints()` is called from a helper in another project, pass the assembly:
+
+```csharp
+app.MapEndpoints(typeof(Hello).Assembly);
+```
+
+To map a single endpoint instead, which needs a public parameterless constructor:
+
+```csharp
+app.MapEndpoint<Hello>();
+```
+
+**Each endpoint is created once, at startup.** `MapEndpoints()` can inject constructor dependencies, but the instance lives for the whole application, so it must not hold scoped services such as a `DbContext`. Receive those per request instead:
+
+```csharp
+public record struct Request([FromServices] AppDbContext Database, [FromRoute] int Id);
+```
+
+## The QUERY verb
+
+`Query`, `QueryHandler` and `QueryHandlerAsync` map the HTTP `QUERY` method, for safe reads that carry a body. Mark the body explicitly with `[FromBody]`.
+
+Swashbuckle doesn't support this verb: with version 10, a single `QUERY` endpoint makes the whole `swagger.json` fail. Hide those endpoints from the API description:
+
+```csharp
+protected override RouteHandlerBuilder Configure(RouteHandlerBuilder builder)
+    => builder.ExcludeFromDescription();
 ```

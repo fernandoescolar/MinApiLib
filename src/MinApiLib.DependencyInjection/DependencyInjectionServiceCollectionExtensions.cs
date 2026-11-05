@@ -1,41 +1,45 @@
+using System.Runtime.CompilerServices;
+
 namespace MinApiLib.DependencyInjection;
 
 public static class DependencyInjectionServiceCollectionExtensions
 {
-    public static IServiceCollection AddAssembly(this IServiceCollection services, Assembly assembly = null)
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    public static IServiceCollection AddAssembly(this IServiceCollection services, Assembly? assembly = null)
     {
         assembly ??= Assembly.GetCallingAssembly();
-        assembly.GetTypes()
-                .Where(x => !x.IsAbstract && !x.IsInterface)
-                .Select(x => new { Type = x, Attribute = x.GetCustomAttribute<RegisterInIServiceCollectionAttribute>() })
-                .Where(x => x.Attribute != null)
-                .ToList()
-                .ForEach(x => services.AddRegisterInIServiceCollectionAttribute(x.Type, x.Attribute));
+        foreach (var type in assembly.GetTypes().Where(x => !x.IsAbstract && !x.IsInterface))
+        {
+            var attribute = type.GetCustomAttribute<RegisterInIServiceCollectionAttribute>();
+            if (attribute is not null)
+            {
+                services.AddRegisterInIServiceCollectionAttribute(type, attribute);
+            }
+        }
 
         return services;
     }
 
     private static IServiceCollection AddRegisterInIServiceCollectionAttribute(this IServiceCollection services, Type t, RegisterInIServiceCollectionAttribute attribute)
     {
-        if (attribute == null)
-        {
-            throw new ArgumentNullException(nameof(attribute));
-        }
-
-        if (attribute.Types is null || attribute.Types.Count() == 0)
+        var types = attribute.Types.ToArray();
+        if (types.Length == 0)
         {
             services.Add(new ServiceDescriptor(t, t, attribute.ServiceLifetime));
             return services;
         }
 
-        if (attribute.Types.Count() == 1)
+        if (types.Length == 1)
         {
-            services.Add(new ServiceDescriptor(attribute.Types.First(), t, attribute.ServiceLifetime));
+            services.Add(new ServiceDescriptor(types[0], t, attribute.ServiceLifetime));
             return services;
         }
 
         services.Add(new ServiceDescriptor(t, t, attribute.ServiceLifetime));
-        attribute.Types.ToList().ForEach(x => services.Add(new ServiceDescriptor(x, sp => sp.GetRequiredService(t), ServiceLifetime.Transient)));
+        foreach (var type in types)
+        {
+            services.Add(new ServiceDescriptor(type, sp => sp.GetRequiredService(t), ServiceLifetime.Transient));
+        }
 
         return services;
     }
