@@ -1,14 +1,16 @@
+using System.Runtime.CompilerServices;
+
 namespace MinApiLib.Hypermedia;
 
 public static class HypermediaServiceCollectionExtentions
 {
-    public static IServiceCollection AddHypermedia(this IServiceCollection services, Assembly assembly = null, string contentType = HypermediaConstants.ContentType)
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    public static IServiceCollection AddHypermedia(this IServiceCollection services, Assembly? assembly = null, string contentType = HypermediaConstants.ContentType)
     {
         assembly ??= Assembly.GetCallingAssembly();
         assembly.GetHypermediaProviders().ToList().ForEach(t => services.AddScoped(typeof(IHypermediaProvider), t));
         services.AddScoped<HypermediaConverter>();
         services.AddSingleton(_ => new HypermediaOptions(contentType));
-        HypermediaConstants.ConfiguredContentType = contentType;
         return services;
     }
 

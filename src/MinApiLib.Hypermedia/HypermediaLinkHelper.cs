@@ -2,7 +2,11 @@ namespace MinApiLib.Hypermedia;
 
 public static class HypermediaLinkHelper
 {
+    [Obsolete("Use FulfillLinkUrls.")]
     public static void FullfillLinkUrls(HypermediaResponse hypermediaResponse, HttpContext httpContext)
+        => FulfillLinkUrls(hypermediaResponse, httpContext);
+
+    public static void FulfillLinkUrls(HypermediaResponse hypermediaResponse, HttpContext httpContext)
     {
         foreach (var link in hypermediaResponse.Links)
         {

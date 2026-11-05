@@ -61,7 +61,7 @@ public class HypermediaLinkHelperTests
         context.Request.PathBase = pathBase;
 
         var response = new HypermediaResponse(new[] { new HypermediaLink("rel", href, "GET") });
-        HypermediaLinkHelper.FullfillLinkUrls(response, context);
+        HypermediaLinkHelper.FulfillLinkUrls(response, context);
 
         return response.Links.Single().Href;
     }

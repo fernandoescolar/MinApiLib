@@ -12,7 +12,8 @@ public class HypermediaLink
         Href = href;
         Method = method;
     }
-    public string Href { get; set; }
-    public string Rel { get; set; }
-    public string Method { get; set; }
+
+    public string Href { get; set; } = string.Empty;
+    public string Rel { get; set; } = string.Empty;
+    public string Method { get; set; } = string.Empty;
 }

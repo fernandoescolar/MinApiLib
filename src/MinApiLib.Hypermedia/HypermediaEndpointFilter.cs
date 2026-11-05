@@ -1,4 +1,6 @@
-﻿namespace MinApiLib.Hypermedia;
+﻿using Microsoft.Net.Http.Headers;
+
+namespace MinApiLib.Hypermedia;
 
 public class HypermediaEndpointFilter : IEndpointFilter
 {
@@ -9,8 +11,11 @@ public class HypermediaEndpointFilter : IEndpointFilter
         _options = options;
     }
 
-    public async ValueTask<object> InvokeAsync(EndpointFilterInvocationContext context, EndpointFilterDelegate next)
+    public async ValueTask<object?> InvokeAsync(EndpointFilterInvocationContext context, EndpointFilterDelegate next)
     {
+        // The body depends on the Accept header, so caches must not share it between both representations.
+        context.HttpContext.Response.Headers.Append(HeaderNames.Vary, HeaderNames.Accept);
+
         var result = await next(context);
         if (!IsHypermediaRequest(context))
         {
@@ -35,12 +40,12 @@ public class HypermediaEndpointFilter : IEndpointFilter
             return result;
         }
 
-        HypermediaLinkHelper.FullfillLinkUrls(hypermediaResponse, context.HttpContext);
+        HypermediaLinkHelper.FulfillLinkUrls(hypermediaResponse, context.HttpContext);
 
         return new HypermediaResult(hypermediaResponse, result as IResult, _options.ContentType);
     }
 
-    private static object GetSuccessValue(object result)
+    private static object? GetSuccessValue(object? result)
         => result switch
         {
             IStatusCodeHttpResult { StatusCode: < 200 or >= 300 } => null,

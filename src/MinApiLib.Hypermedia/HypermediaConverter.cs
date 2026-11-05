@@ -9,8 +9,7 @@ public class HypermediaConverter
         _providers = providers;
     }
 
-
-    public HypermediaResponse Convert(object @object)
+    public HypermediaResponse? Convert(object? @object)
     {
         if (@object is null)
         {
@@ -18,11 +17,6 @@ public class HypermediaConverter
         }
 
         var provider = _providers.FirstOrDefault(p => p.CanProvideLinkFor(@object));
-        if (provider is null)
-        {
-            return null;
-        }
-
-        return provider.Convert(@object);
+        return provider?.Convert(@object);
     }
 }

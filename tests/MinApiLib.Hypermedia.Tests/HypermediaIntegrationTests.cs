@@ -105,6 +105,24 @@ public class HypermediaIntegrationTests : IClassFixture<TestWebApplicationFactor
         Assert.Contains("http://localhost/base/things/1", Hrefs(await ReadJsonAsync(response)));
     }
 
+    [Theory]
+    [InlineData(Hypermedia)]
+    [InlineData("application/json")]
+    public async Task Tells_caches_that_the_response_varies_by_accept(string accept)
+    {
+        var response = await SendAsync(HttpMethod.Get, "/things/1", accept);
+
+        Assert.Contains("Accept", response.Headers.Vary);
+    }
+
+    [Fact]
+    public async Task Without_filter_does_not_vary_by_accept()
+    {
+        var response = await SendAsync(HttpMethod.Get, "/without-filter", Hypermedia);
+
+        Assert.DoesNotContain("Accept", response.Headers.Vary);
+    }
+
     // Content negotiation
 
     [Theory]
@@ -284,5 +302,24 @@ public class HypermediaIntegrationTests : IClassFixture<TestWebApplicationFactor
 
         Assert.Equal(StatusCodes.Status200OK, produces.StatusCode);
         Assert.Contains(Hypermedia, produces.ContentTypes);
+    }
+
+    [Fact]
+    public void ProducesHypermedia_uses_the_content_type_of_the_application()
+    {
+        const string custom = "application/vnd.custom+json";
+        using var factory = _factory.WithWebHostBuilder(b =>
+            b.ConfigureServices(s => s.AddSingleton(new HypermediaOptions(custom))));
+
+        var endpoint = factory.Services
+                              .GetRequiredService<EndpointDataSource>()
+                              .Endpoints
+                              .Single(x => x.Metadata.GetMetadata<IEndpointNameMetadata>()?.EndpointName == "GetDocumented");
+
+        var produces = endpoint.Metadata
+                               .GetOrderedMetadata<IProducesResponseTypeMetadata>()
+                               .Single(x => x.Type == typeof(HypermediaObject<Thing>));
+
+        Assert.Equal(new[] { custom }, produces.ContentTypes);
     }
 }

@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Http.Features;
 
 namespace MinApiLib.Hypermedia;
 
-internal record HypermediaResult(HypermediaResponse Value, IResult OriginalResult, string ContentType) : IResult
+internal record HypermediaResult(HypermediaResponse Value, IResult? OriginalResult, string ContentType) : IResult
 {
     public async Task ExecuteAsync(HttpContext httpContext)
     {
