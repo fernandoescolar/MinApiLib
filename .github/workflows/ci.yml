@@ -2,6 +2,9 @@ on:
   push:
     branches:
     - main
+  pull_request:
+    branches:
+    - main
 
 name: CI
 
@@ -20,8 +23,10 @@ jobs:
             9.0.x
             10.0.x
       - name: Install dependencies
-        run: dotnet restore
+        run: dotnet restore MinApiLib.sln
       - name: Build
-        run: dotnet build --configuration Release --no-restore
+        run: dotnet build MinApiLib.sln --configuration Release --no-restore
       - name: Test
-        run: dotnet test --no-restore --verbosity normal
+        run: dotnet test MinApiLib.sln --configuration Release --no-build --verbosity normal
+      - name: Build samples
+        run: dotnet build samples/MinApiLib.Samples.sln --configuration Release
