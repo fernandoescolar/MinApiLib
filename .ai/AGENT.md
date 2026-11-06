@@ -95,3 +95,4 @@ Each of these fails silently or far from its cause.
 - `MinApiLib.sln` holds the library and its tests; the samples are in `samples/MinApiLib.Samples.sln`.
 - The libraries and tests target `net8.0;net9.0;net10.0`, and the samples `net10.0`. Shared settings are in `src/Directory.Build.props` and `tests/Directory.Build.props`.
 - Libraries using the Web SDK must set `<OutputType>Library</OutputType>` in their own `.csproj`: the SDK overrides it from `Directory.Build.props`.
+- The context and skills for AI tools come from `.ai`. Edit them there, then run `.ai/convert.sh`: the copies each tool reads are generated.
