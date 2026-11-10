@@ -44,6 +44,9 @@ jobs:
     needs: pack
     runs-on: ubuntu-latest
     name: Publish MinApiLib
+    permissions:
+       id-token: write
+       contents: read
     steps:
       - name: Download Artifact
         uses: actions/download-artifact@v4
