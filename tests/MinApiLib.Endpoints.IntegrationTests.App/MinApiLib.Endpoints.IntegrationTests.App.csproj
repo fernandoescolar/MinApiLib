@@ -1,4 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <!-- Test host serves no static files. Avoids SDK 11 static web assets error about the
+         BlazorWeb HotReload module having no matching endpoints. -->
+    <StaticWebAssetsEnabled>false</StaticWebAssetsEnabled>
+  </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\MinApiLib.Endpoints\MinApiLib.Endpoints.csproj" />
     <ProjectReference Include="..\..\src\MinApiLib.FluentValidation\MinApiLib.FluentValidation.csproj" />

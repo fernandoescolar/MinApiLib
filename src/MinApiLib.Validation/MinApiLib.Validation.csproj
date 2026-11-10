@@ -7,6 +7,6 @@
     <Description>Deprecated: use MinApiLib.FluentValidation. Data annotations validation filter for Minimal API.</Description>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="MiniValidation" Version="0.9.2" />
+    <PackageReference Include="MiniValidation" Version="0.10.0" />
   </ItemGroup>
 </Project>

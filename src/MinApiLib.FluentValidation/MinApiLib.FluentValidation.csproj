@@ -6,6 +6,6 @@
     <Description>Fluent validation filter for Minimal API</Description>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="FluentValidation" Version="12.1.0" />
+    <PackageReference Include="FluentValidation" Version="12.2.0" />
   </ItemGroup>
 </Project>

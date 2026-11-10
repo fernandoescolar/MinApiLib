@@ -22,6 +22,7 @@ jobs:
             8.0.x
             9.0.x
             10.0.x
+            11.0.x
       - name: Test
         run: dotnet test
       - name: Create NuGet packages
@@ -56,6 +57,7 @@ jobs:
             8.0.x
             9.0.x
             10.0.x
+            11.0.x
       - name: Publish NuGet packages
         run: |
           dotnet nuget push ./nupkg/*.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
